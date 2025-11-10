@@ -1,0 +1,11 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('local/new/', views.create_local, name='create_local'),
+    path('midia/new/', views.create_midia, name='create_midia'),
+    path('categoria/new/', views.create_categoria, name='create_categoria'),
+    path('evento/new/', views.create_evento, name='create_evento'),
+    path('avaliacao/new/', views.create_avaliacao, name='create_avaliacao'),
+]
