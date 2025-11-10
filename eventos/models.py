@@ -4,7 +4,7 @@ class Local(models.Model):
     nome = models.CharField(max_length=100)
     cnpj = models.CharField(max_length=18, unique=True)
     link = models.URLField()
-    # TODO Adicionar endereço quando o modelo de endereço estiver pronto
+    endereco = models.ForeignKey('pessoas.Endereco', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.nome
@@ -31,8 +31,7 @@ class Evento(models.Model):
     capacidade = models.IntegerField()
     local = models.ForeignKey(Local, on_delete=models.CASCADE, blank=True, null=True)
     categorias = models.ManyToManyField(Categoria, related_name='eventos')
-
-    # Adicionar organizador quando o modelo de usuário estiver pronto
+    organizador = models.ForeignKey('pessoas.Pessoa', on_delete=models.CASCADE, related_name='eventos_organizados', blank=True, null=True)
 
     def __str__(self):
         return self.titulo
@@ -43,8 +42,8 @@ class Avaliacao(models.Model):
     nota = models.IntegerField()
     comentario = models.TextField()
     data_hora = models.DateTimeField(auto_now_add=True)
+    pessoa = models.ForeignKey('pessoas.Pessoa', on_delete=models.CASCADE, related_name='avaliacoes', null=True, blank=True)
 
-    # TODO adicionar participante quando o modelo de usuário estiver pronto
     def __str__(self):
         return f'Avaliação {self.nota} para {self.evento.titulo}'
     

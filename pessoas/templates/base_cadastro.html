@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}PinArt{% endblock %}</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 24px; background:#f7f7f8; color:#222; }
+    .container { max-width:760px; margin:0 auto; background:white; padding:20px 28px; border-radius:8px; box-shadow:0 3px 10px rgba(0,0,0,0.06); }
+    h1 { margin-top:0; font-size:1.3rem; }
+    form p { margin:10px 0; }
+    label { display:block; font-weight:600; margin-bottom:6px; }
+    input[type="text"], input[type="email"], input[type="password"], input[type="datetime-local"], textarea {
+      width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:6px; box-sizing:border-box;
+    }
+    .btn { display:inline-block; padding:8px 14px; border-radius:6px; background:#2b6cb0; color:white; text-decoration:none; border:none; cursor:pointer; }
+    .btn.secondary { background:#666; }
+    .errors { background:#ffe6e6; color:#900; padding:8px 10px; border-radius:6px; margin-bottom:12px; }
+    .field-error { color:#b00000; font-size:0.9rem; margin-top:6px; }
+    .form-row { margin-bottom:12px; }
+    .links { margin-top:12px; }
+    .messages { margin-bottom:12px; }
+    .small { font-size:0.9rem; color:#666; }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="container">
+    <h1>{% block header %}PinArt{% endblock %}</h1>
+
+    <div class="messages">
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="errors">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <div class="links small">
+      
+      <a href="/">Início</a>
+    </div>
+  </div>
+</body>
+</html>

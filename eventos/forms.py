@@ -1,7 +1,7 @@
 from django import forms
 from .models import Local, Midia, Categoria, Evento, Avaliacao
 
-class LocalForm(forms.ModelForm):
+class LocalForm(forms.ModelForm): # TODO adicionar endereço
     class Meta:
         model = Local
         fields = ['nome', 'cnpj', 'link']

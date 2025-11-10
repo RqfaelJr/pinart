@@ -1,0 +1,79 @@
+{% extends "base_cadastro.html" %}
+{% block title %}Cadastro Organizador — PinArt{% endblock %}
+{% block header %}Cadastro — Organizador{% endblock %}
+
+{% block content %}
+  <p class="small">Preencha os dados para criar a conta de Organizador.</p>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    {% if user_form.non_field_errors or pessoa_form.non_field_errors %}
+      <div class="errors">
+        {% for e in user_form.non_field_errors %}{{ e }}<br>{% endfor %}
+        {% for e in pessoa_form.non_field_errors %}{{ e }}<br>{% endfor %}
+      </div>
+    {% endif %}
+
+    <fieldset>
+      <legend><strong>Dados de acesso</strong></legend>
+
+      <div class="form-row">
+        <label for="id_username">Usuário</label>
+        {{ user_form.username }}
+        {% if user_form.username.errors %}<div class="field-error">{{ user_form.username.errors|striptags }}</div>{% endif %}
+      </div>
+
+      <div class="form-row">
+        <label for="id_email">E-mail</label>
+        {{ user_form.email }}
+        {% if user_form.email.errors %}<div class="field-error">{{ user_form.email.errors|striptags }}</div>{% endif %}
+      </div>
+
+      <div class="form-row">
+        <label for="id_first_name">Nome</label>
+        {{ user_form.first_name }}
+        {% if user_form.first_name.errors %}<div class="field-error">{{ user_form.first_name.errors|striptags }}</div>{% endif %}
+      </div>
+
+      <div class="form-row">
+        <label for="id_last_name">Sobrenome</label>
+        {{ user_form.last_name }}
+        {% if user_form.last_name.errors %}<div class="field-error">{{ user_form.last_name.errors|striptags }}</div>{% endif %}
+      </div>
+
+      <div class="form-row">
+        <label for="id_password">Senha</label>
+        {{ user_form.password }}
+        {% if user_form.password.errors %}<div class="field-error">{{ user_form.password.errors|striptags }}</div>{% endif %}
+      </div>
+    </fieldset>
+
+    <fieldset style="margin-top:12px">
+      <legend><strong>Dados pessoais</strong></legend>
+
+      <div class="form-row">
+        <label for="id_cpf">CPF</label>
+        {{ pessoa_form.cpf }}
+        {% if pessoa_form.cpf.errors %}<div class="field-error">{{ pessoa_form.cpf.errors|striptags }}</div>{% endif %}
+      </div>
+
+      <div class="form-row">
+        <label for="id_telefone">Telefone</label>
+        {{ pessoa_form.telefone }}
+        {% if pessoa_form.telefone.errors %}<div class="field-error">{{ pessoa_form.telefone.errors|striptags }}</div>{% endif %}
+      </div>
+
+      <div class="form-row">
+        <label for="id_endereco">Endereço (id ou texto conforme seu form)</label>
+        {{ pessoa_form.endereco }}
+        {% if pessoa_form.endereco.errors %}<div class="field-error">{{ pessoa_form.endereco.errors|striptags }}</div>{% endif %}
+      </div>
+    </fieldset>
+
+    <p style="margin-top:14px">
+      <button class="btn" type="submit">Criar conta Organizador</button>
+      <a class="btn secondary" href="{% url 'cadastro_participante' %}">Ir para Cadastro Participante</a>
+    </p>
+  </form>
+{% endblock %}
