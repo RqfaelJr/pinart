@@ -59,6 +59,14 @@
       </div>
 
       <div class="form-row">
+        <label for="id_data_nascimento">Data de Nascimento</label>
+        {{ pessoa_form.data_nascimento }}
+        {% if pessoa_form.data_nascimento.errors %}
+          <div class="field-error">{{ pessoa_form.data_nascimento.errors|striptags }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-row">
         <label for="id_telefone">Telefone</label>
         {{ pessoa_form.telefone }}
         {% if pessoa_form.telefone.errors %}<div class="field-error">{{ pessoa_form.telefone.errors|striptags }}</div>{% endif %}
@@ -68,9 +76,15 @@
         <label for="id_endereco">Endereço (id ou texto conforme seu form)</label>
         {{ pessoa_form.endereco }}
         {% if pessoa_form.endereco.errors %}<div class="field-error">{{ pessoa_form.endereco.errors|striptags }}</div>{% endif %}
+
+        <div style="margin-top:8px;">
+          {# Ajuste 'create_endereco' para o nome da URL que cadastra endereços no seu projeto #}
+          <a class="btn secondary" href="{% url 'cadastro_endereco' %}?next={{ request.get_full_path|urlencode }}">Cadastrar endereço</a>
+        </div>
       </div>
     </fieldset>
 
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
     <p style="margin-top:14px">
       <button class="btn" type="submit">Criar conta Organizador</button>
       <a class="btn secondary" href="{% url 'cadastro_participante' %}">Ir para Cadastro Participante</a>

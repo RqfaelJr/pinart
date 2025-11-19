@@ -3,6 +3,7 @@ from django.urls import reverse
 from .models import Evento
 from .forms import LocalForm, MidiaForm, CategoriaForm, EventoForm, AvaliacaoForm
 from pessoas.decorators import organizador_required, participante_required
+from django.contrib.auth.decorators import login_required
 
 def _get_next_url(request, default_name='home'):
     return request.POST.get('next') or request.GET.get('next') or reverse(default_name)
@@ -11,6 +12,7 @@ def home(request):
     eventos = Evento.objects.all().order_by('data_hora_inicio')
     return render(request, 'index.html', {'eventos': eventos})
 
+@login_required
 @organizador_required
 def create_local(request):
     next_url = _get_next_url(request)
@@ -23,6 +25,7 @@ def create_local(request):
         form = LocalForm()
     return render(request, 'form.html', {'form': form, 'title': 'Criar Local', 'next': next_url})
 
+@login_required
 @organizador_required
 def create_midia(request):
     next_url = _get_next_url(request)
@@ -35,6 +38,7 @@ def create_midia(request):
         form = MidiaForm()
     return render(request, 'form.html', {'form': form, 'title': 'Criar Mídia', 'next': next_url})
 
+@login_required
 @organizador_required
 def create_categoria(request):
     next_url = _get_next_url(request)
@@ -47,6 +51,7 @@ def create_categoria(request):
         form = CategoriaForm()
     return render(request, 'form.html', {'form': form, 'title': 'Criar Categoria', 'next': next_url})
 
+@login_required
 @organizador_required
 def create_evento(request):
     if request.method == 'POST':
@@ -67,6 +72,7 @@ def create_evento(request):
         'next_midia': reverse('create_midia') + f'?next={request.path}',
     })
 
+@login_required 
 @participante_required
 def create_avaliacao(request):
     next_url = _get_next_url(request)
