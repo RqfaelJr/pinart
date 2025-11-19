@@ -124,3 +124,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# TODO
+# Sistema de notificações
+# Arrumar páginas de cadastros
+# Arrumar tela de inicio
+# Adicionar cadastro de endereços
+# Procurar APIs

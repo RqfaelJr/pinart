@@ -42,3 +42,16 @@ class Inscricao(models.Model): # TODO: implementar lógica de inscrição
 
     def __str__(self):
         return f'Inscrição de {self.pessoa.user.username} no evento {self.evento.titulo}'
+    
+class Notificacao(models.Model):
+    titulo = models.CharField(max_length=200)
+    mensagem = models.TextField()
+    lida = models.BooleanField(default=False)
+    tipo = models.CharField(max_length=50)
+
+    data_hora = models.DateTimeField(auto_now_add=True)
+    pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE, related_name='notificacoes')
+    evento = models.ForeignKey('eventos.Evento', on_delete=models.CASCADE, related_name='notificacoes', null=True, blank=True)
+    
+    def __str__(self):
+        return f'Notificação para {self.pessoa.user.username} - {"Lida" if self.lida else "Não lida"}'
