@@ -58,7 +58,7 @@ class EventoForm(forms.ModelForm):
 class AvaliacaoForm(forms.ModelForm):
     class Meta:
         model = Avaliacao
-        fields = ['evento', 'nota', 'comentario']
+        fields = ['nota', 'comentario']
 
     def clean_nota(self):
         nota = self.cleaned_data.get('nota')

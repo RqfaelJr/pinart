@@ -43,7 +43,7 @@ class Evento(models.Model):
 class Avaliacao(models.Model):
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE, related_name='avaliacoes')
     nota = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    comentario = models.TextField()
+    comentario = models.TextField(blank=True, default='')
     data_hora = models.DateTimeField(auto_now_add=True)
     pessoa = models.ForeignKey('pessoas.Pessoa', on_delete=models.CASCADE, related_name='avaliacoes', null=True, blank=True)
 

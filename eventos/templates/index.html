@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
     {% load static %}
 
+<section class="categories">
 
         {% block title %}Início - PinArt{% endblock %}
 
@@ -18,11 +19,17 @@
 
 
         <section class="categories">
-            <h2>Categorias</h2>
+            <h2>
+                <i class="fa-solid fa-arrow-trend-up" style="color: #8b5cf6;"></i> 
+                Categorias
+            </h2>
+            
             <div class="category-list">
                 <a href="?categoria=" class="{% if not categoria_selecionada %}active{% endif %}">Todos</a>
                 {% for cat in categorias %}
-                <a href="?categoria={{ cat.id }}" class="{% if categoria_selecionada == cat.id %}active{% endif %}">{{ cat.nome }}</a>
+                    <a href="?categoria={{ cat.id }}" class="{% if categoria_selecionada|stringformat:"s" == cat.id|stringformat:"s" %}active{% endif %}">
+                        {{ cat.nome }}
+                    </a>
                 {% endfor %}
             </div>
         </section>
@@ -34,7 +41,11 @@
             <div class="events-container">
             {% for event in eventos %}
             <div class="event-card">
-            <img src="{{ event.imagem.url }}" class="event-image">
+            {% if event.imagem %}
+            <img src="{{ event.imagem.url }}" class="event-image" alt="{{ event.titulo }}">
+            {% else %}
+            <img src="{% static 'img/evento.png' %}" class="event-image" alt="Imagem padrão">
+            {% endif %}
             <div class="content">
                 {% for cat in event.categorias.all %}
                 <span class="tag">{{ cat.nome }}</span>

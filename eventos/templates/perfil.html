@@ -17,6 +17,13 @@
         </div>
         <h1 class="profile-name">{{ pessoa.nome }}</h1>
         <p class="profile-username">@{{ request.user.username }}</p>
+
+        <form action="{% url 'logout' %}" method="post" style="margin-top: 15px;">
+            {% csrf_token %}
+            <button type="submit" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Sair da Conta
+            </button>
+        </form>
     </div>
     <div class="stats-bar">
         <div class="stat-item">

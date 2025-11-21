@@ -1,9 +1,9 @@
-from pyexpat.errors import messages
+from django.contrib import messages
 from random import random
 import requests
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import Categoria, Evento
+from .models import Avaliacao, Categoria, Evento
 from pessoas.models import Notificacao
 from pessoas.forms import EnderecoForm
 from .forms import LocalForm, MidiaForm, CategoriaForm, EventoForm, AvaliacaoForm
@@ -168,8 +168,10 @@ def marcar_todas_lidas(request):
 @login_required
 def detalhe_evento(request, evento_id):
     evento = Evento.objects.get(id=evento_id)
+    lista_avaliacoes = evento.avaliacoes.all().order_by('-data_hora')
     return render(request, 'detalhe_evento.html', {
-        'evento': evento
+        'evento': evento,
+        'avaliacoes': lista_avaliacoes
     })
 @login_required
 def perfil(request):

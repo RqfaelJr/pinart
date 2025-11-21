@@ -3,324 +3,9 @@
 {% load tz %}
 
 {% block content %}
-
-<style>
-    /* ... (MANTENHA TODO O CSS ANTERIOR AQUI) ... */
-    /* Vou omitir o CSS para economizar espaço, mas mantenha tudo igual ao arquivo anterior */
-    /* Reset básico para esta página */
-    .event-detail-page {
-        background-color: #f8f9fa;
-        min-height: 100vh;
-        padding-bottom: 60px;
-    }
-
-    /* --- 1. HERO SECTION (Banner) --- */
-    .event-hero {
-        position: relative;
-        height: 400px;
-        width: 100%;
-        background-size: cover;
-        background-position: center;
-        background-color: #4b2aad;
-        display: flex;
-        align-items: flex-end;
-        color: white;
-    }
-
-    .hero-overlay {
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8));
-    }
-
-    .hero-content {
-        position: relative;
-        z-index: 2;
-        width: 100%;
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 0 20px 80px 20px;
-    }
-
-    .btn-back {
-        position: absolute;
-        top: 30px;
-        left: 30px;
-        background: rgba(255,255,255,0.2);
-        backdrop-filter: blur(5px);
-        color: white;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        font-size: 18px;
-        transition: 0.3s;
-        z-index: 10;
-    }
-    
-    .btn-back:hover { background: rgba(255,255,255,0.4); }
-
-    .event-tag {
-        background-color: #d946ef;
-        color: white;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        display: inline-block;
-        margin-bottom: 10px;
-    }
-
-    .event-title-hero {
-        font-size: 36px;
-        font-weight: 700;
-        margin: 0;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
-
-    /* --- 2. BARRA FLUTUANTE DE AÇÃO --- */
-    .action-bar-container {
-        max-width: 1000px;
-        margin: -40px auto 30px auto;
-        padding: 0 20px;
-        position: relative;
-        z-index: 10;
-    }
-
-    .action-bar {
-        background: white;
-        border-radius: 20px;
-        padding: 15px 25px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        display: flex;
-        gap: 15px;
-        align-items: center;
-    }
-
-    .btn-confirm {
-        flex: 1;
-        background: linear-gradient(90deg, #a855f7, #f97316);
-        color: white;
-        border: none;
-        padding: 15px;
-        border-radius: 12px;
-        font-size: 16px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: transform 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        text-decoration: none;
-    }
-
-    .btn-confirm:hover { transform: scale(1.02); }
-    
-    .btn-confirm.confirmed {
-        background: #10b981;
-    }
-
-    .btn-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        border: 1px solid #eee;
-        background: white;
-        color: #666;
-        font-size: 20px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: 0.3s;
-    }
-
-    .btn-icon:hover {
-        background: #f3e8ff;
-        color: #8b5cf6;
-        border-color: #d8b4fe;
-    }
-
-    /* --- 3. CONTEÚDO PRINCIPAL (Cards) --- */
-    .content-container {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .info-card {
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        border: 1px solid #f0f0f0;
-    }
-
-    .card-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #4b2aad;
-        margin: 0 0 20px 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .detail-item {
-        display: flex;
-        gap: 15px;
-        margin-bottom: 20px;
-    }
-
-    .detail-icon {
-        width: 40px;
-        height: 40px;
-        background: #f3e8ff;
-        color: #8b5cf6;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        flex-shrink: 0;
-    }
-
-    .detail-text h4 { margin: 0; font-size: 14px; color: #666; font-weight: 600; }
-    .detail-text p { margin: 5px 0 0 0; font-size: 16px; color: #333; font-weight: 500; }
-
-    /* Novos estilos para datas organizadas */
-    .date-info-container {
-        display: flex;
-        flex-direction: column;
-        gap: 8px; /* Espaço entre Inicio e Fim */
-        margin-top: 8px;
-    }
-
-    .date-entry {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
-        font-size: 15px;
-        color: #333;
-        line-height: 1.4;
-    }
-
-    .date-badge {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        padding: 3px 8px;
-        border-radius: 6px;
-        min-width: 55px;
-        text-align: center;
-        letter-spacing: 0.5px;
-    }
-    
-    .badge-start { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; } /* Verde */
-    .badge-end   { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; } /* Vermelho */
-
-
-    /* Sobre o Organizador */
-    .organizer-box {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid #eee;
-    }
-    
-    .organizer-avatar {
-        width: 50px; height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    /* Comentários */
-    .comment-input-area {
-        background: #faf7ff;
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 30px;
-    }
-
-    .comment-textarea {
-        width: 100%;
-        border: 1px solid #e0d0ff;
-        border-radius: 8px;
-        padding: 12px;
-        font-family: inherit;
-        resize: vertical;
-        min-height: 80px;
-        margin-bottom: 10px;
-    }
-
-    .btn-post-comment {
-        background: #f97316;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .comment-item {
-        padding: 20px 0;
-        border-bottom: 1px solid #eee;
-    }
-
-    /* --- NOVO CSS PARA ESTRELAS --- */
-    
-    /* 1. Estrelas de Exibição (Nos comentários) */
-    .stars-display {
-        color: #fbbf24; /* Amarelo/Dourado */
-        font-size: 14px;
-        margin: 5px 0;
-        letter-spacing: 2px;
-    }
-    
-    /* 2. Estrelas Interativas (No formulário) */
-    .rating-box {
-        display: flex;
-        flex-direction: row-reverse; /* Inverte para facilitar a seleção CSS */
-        justify-content: flex-end;
-        gap: 5px;
-        margin-bottom: 15px;
-    }
-
-    .rating-box input {
-        display: none; /* Esconde os radio buttons reais */
-    }
-
-    .rating-box label {
-        cursor: pointer;
-        font-size: 24px;
-        color: #ddd; /* Cor da estrela vazia */
-        transition: color 0.2s;
-    }
-
-    /* Efeito Hover e Selecionado */
-    .rating-box input:checked ~ label, /* Estrelas anteriores à selecionada */
-    .rating-box label:hover,          /* Estrela em hover */
-    .rating-box label:hover ~ label   /* Estrelas anteriores à em hover */
-    {
-        color: #fbbf24; /* Dourado */
-    }
-
-</style>
-
+<link rel="stylesheet" href="{% static 'css/detalhe_evento.css' %}">
 <div class="event-detail-page">
     
-    <!-- 1. HERO SECTION -->
     <div class="event-hero" style='background-image: url("{% if evento.imagem %}{{ evento.imagem.url }}{% else %}{% endif %}");'></div>
         
         <div class="hero-overlay"></div>
@@ -335,7 +20,6 @@
         </div>
     </div>
 
-    <!-- 2. BARRA FLUTUANTE -->
     <div class="action-bar-container">
         <form method="POST" action="{% url 'confirmar_presenca' evento.id %}">
             {% csrf_token %}
@@ -356,10 +40,8 @@
         </form>
     </div>
 
-    <!-- 3. CONTEÚDO -->
     <div class="content-container">
         
-        <!-- Card Detalhes -->
         <div class="info-card">
             <h3 class="card-title">Detalhes do Evento</h3>
             
@@ -393,14 +75,6 @@
             </div>
 
             <div class="detail-item">
-                <div class="detail-icon"><i class="fa-solid fa-dollar-sign"></i></div>
-                <div class="detail-text">
-                    <h4>Preço</h4>
-                    <p>{% if evento.preco > 0 %}R$ {{ evento.preco|floatformat:2 }}{% else %}Gratuito{% endif %}</p>
-                </div>
-            </div>
-
-            <div class="detail-item">
                 <div class="detail-icon"><i class="fa-solid fa-users"></i></div>
                 <div class="detail-text">
                     <h4>Participantes</h4>
@@ -409,7 +83,6 @@
             </div>
         </div>
 
-        <!-- Card Sobre o Evento -->
         <div class="info-card">
             <h3 class="card-title" style="color: #333;">Sobre o Evento</h3>
             <p style="line-height: 1.6; color: #555;">
@@ -417,8 +90,8 @@
             </p>
 
             <div class="organizer-box">
-                {% if evento.organizador.pessoa.foto %}
-                    <img src="{{ evento.organizador.pessoa.foto.url }}" class="organizer-avatar">
+                {% if evento.organizador.foto %}
+                    <img src="{{ evento.organizador.foto.url }}" class="organizer-avatar">
                 {% else %}
                     <div class="organizer-avatar" style="background: #eee; display: flex; align-items: center; justify-content: center; color: #999;">
                         <i class="fa-solid fa-user"></i>
@@ -426,12 +99,11 @@
                 {% endif %}
                 <div>
                     <div style="font-size: 12px; color: #999;">Organizador</div>
-                    <div style="font-weight: 700; color: #4b2aad;">{{ evento.organizador.username }}</div>
+                    <div style="font-weight: 700; color: #4b2aad;">{{ evento.organizador.user.get_full_name }}</div>
                 </div>
             </div>
         </div>
 
-        <!-- Card Comentários (COM ESTRELAS) -->
         <div class="info-card">
             <h3 class="card-title" style="color: #333;">
                 <i class="fa-regular fa-comment-dots"></i> Comentários e Avaliações
@@ -441,9 +113,7 @@
                 {% csrf_token %}
                 <div class="comment-input-area">
                     
-                    <!-- Input de Estrelas -->
                     <div class="rating-box">
-                        <!-- Ordem invertida por causa do flex-direction: row-reverse -->
                         <input type="radio" name="nota" value="5" id="star5"><label for="star5">★</label>
                         <input type="radio" name="nota" value="4" id="star4"><label for="star4">★</label>
                         <input type="radio" name="nota" value="3" id="star3"><label for="star3">★</label>
@@ -451,26 +121,22 @@
                         <input type="radio" name="nota" value="1" id="star1"><label for="star1">★</label>
                     </div>
 
-                    <textarea name="texto" class="comment-textarea" placeholder="Compartilhe sua experiência..." required></textarea>
+                    <textarea name="comentario" class="comment-textarea" placeholder="Compartilhe sua experiência..." required></textarea>
                     <button type="submit" class="btn-post-comment">Publicar Comentário</button>
                 </div>
             </form>
 
-            <!-- ATUALIZADO: Loop de comentários usando os nomes corretos do model -->
-            {% for comentario in comentarios %}
+            {% for comentario in avaliacoes %}
             <div class="comment-item">
                 <div style="display: flex; gap: 15px;">
                     <div style="width: 40px; height: 40px; background: #eee; border-radius: 50%; overflow: hidden;">
-                        <!-- Acessa a foto da Pessoa corretamente -->
                         {% if comentario.pessoa.foto %}
                             <img src="{{ comentario.pessoa.foto.url }}" style="width:100%; height:100%; object-fit: cover;">
                         {% endif %}
                     </div>
                     <div>
-                        <!-- Acessa o nome da Pessoa corretamente -->
-                        <div style="font-weight: 700; color: #4b2aad;">{{ comentario.pessoa.nome }}</div>
+                        <div style="font-weight: 700; color: #4b2aad;">{{ comentario.pessoa.user.get_full_name }}</div>
                         
-                        <!-- Exibição das Estrelas -->
                         <div class="stars-display">
                             <i class="fa-star {% if comentario.nota >= 1 %}fa-solid{% else %}fa-regular{% endif %}"></i>
                             <i class="fa-star {% if comentario.nota >= 2 %}fa-solid{% else %}fa-regular{% endif %}"></i>
@@ -479,9 +145,7 @@
                             <i class="fa-star {% if comentario.nota >= 5 %}fa-solid{% else %}fa-regular{% endif %}"></i>
                         </div>
 
-                        <!-- Acessa o texto do comentário corretamente -->
                         <p style="margin-top: 5px; color: #555;">{{ comentario.comentario }}</p>
-                        <!-- Acessa a data_hora corretamente -->
                         <small style="color: #bbb;">{{ comentario.data_hora|timezone:"America/Sao_Paulo"|date:"d/m/Y" }}</small>
                     </div>
                 </div>

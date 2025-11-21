@@ -49,6 +49,11 @@
                 </button>
             </div>
         </div>
+        
+        <div class="form-card">
+            <label class="form-label">Capacidade</label>
+            {{ form.capacidade }}
+        </div>
 
         <div class="form-card">
             <div class="label-with-action">
@@ -70,6 +75,12 @@
             <button type="submit" class="btn-primary">Salvar</button>
             <a href="{% url 'home' %}" class="btn-secondary">Cancelar</a>
         </div>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+        {% endif %}
 
     </form>
 </div>
