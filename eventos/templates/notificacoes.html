@@ -4,7 +4,7 @@
 {% block content %}
 
 <!-- CSS Específico desta tela -->
-<link rel="stylesheet" href="{% static 'css/notificacoes.css' %}">
+<link rel="stylesheet" href="{% static 'css/notificacao.css' %}">
 
 <div class="notificacoes-page">
     
@@ -23,21 +23,19 @@
 
     <div class="notificacoes-list">
         {% for notif in notificacoes %}
-            <!-- Adiciona a classe 'unread' se a notificação não foi lida -->
             <div class="notificacao-card {% if not notif.lida %}unread{% endif %}">
                 
-                <!-- Lógica de Ícones baseada no tipo -->
                 <div class="notif-icon-box 
                     {% if notif.tipo == 'evento' %}icon-evento
                     {% elif notif.tipo == 'social' %}icon-social
                     {% else %}icon-alerta{% endif %}">
                     
                     {% if notif.tipo == 'evento' %}
-                        <i class="fa-regular fa-calendar"></i> <!-- Ícone Calendário -->
+                        <i class="fa-regular fa-calendar"></i>
                     {% elif notif.tipo == 'social' %}
-                        <i class="fa-regular fa-user"></i> <!-- Ícone Usuário -->
+                        <i class="fa-regular fa-user"></i> 
                     {% else %}
-                        <i class="fa-regular fa-bell"></i> <!-- Ícone Sino -->
+                        <i class="fa-regular fa-bell"></i> 
                     {% endif %}
                 </div>
 
@@ -60,8 +58,4 @@
     </div>
 
 </div>
-
-<!-- Se você não usa FontAwesome no base.html, descomente a linha abaixo -->
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
-
 {% endblock %}

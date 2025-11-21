@@ -33,13 +33,11 @@ def home(request):
 @organizador_required
 def create_local(request):
     if request.method == 'POST':
-        # Verifica se é uma requisição AJAX/JSON do Modal
         if request.headers.get('Content-Type') == 'application/json':
             data = json.loads(request.body)
             form = LocalForm(data)
             if form.is_valid():
                 local = form.save()
-                # Retorna JSON para o JavaScript do modal
                 return JsonResponse({
                     'id': local.id,
                     'nome': local.nome,

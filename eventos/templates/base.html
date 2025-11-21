@@ -1,39 +1,69 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{% block title %}PinArt{% endblock %}</title>
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PinArt</title>
+    
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    </head>
-    <body>
-        <header class="navbar">
-    <div class="logo">PinArt</div>
-    <img src="{% static 'img/logo.png' %}" alt="PinArt" class="logo-img">
-    <nav>
-        <ul>
-            <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Início</a></li>
-            <li><a href="#">Feed</a></li>
-            <li><a href="#">Mapa</a></li>
-            <!-- Botão criar evento -->
-            <li><a href="{% url 'create_evento' %}" class="btn-criar-evento">Criar Evento</a></li>
-            
-            <!-- LINK CORRIGIDO AQUI -->
-            <li>
-                <a href="{% url 'lista_notificacoes' %}" class="{% if request.resolver_match.url_name == 'lista_notificacoes' %}active{% endif %}">
-                    Notificações
-                </a>
-            </li>
-            
-            <li><a href="{% url 'perfil' %}">Perfil</a></li>
-        </ul>
-    </nav>
-</header>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        nav ul li a i {
+            margin-right: 8px;
+            font-size: 1.1em; 
+        }
+        
+        .btn-criar-evento i {
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
 
-        {% block content %}{% endblock %}
-    </body>
+    <header class="navbar">
+        <div class="logo">PinArt</div>
+        <img src="{% static 'img/logo.png' %}" alt="PinArt" class="logo-img">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/" class="{% if request.path == '/' %}active{% endif %}">
+                        <i class="fa-solid fa-house"></i> Início
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-map-location-dot"></i> Mapa
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'create_evento' %}" class="btn-criar-evento {% if request.resolver_match.url_name == 'create_evento' %}active{% endif %}">
+                        <i class="fa-solid fa-circle-plus"></i> Criar Evento
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'lista_notificacoes' %}" class="{% if request.resolver_match.url_name == 'lista_notificacoes' %}active{% endif %}">
+                        <i class="fa-solid fa-bell"></i> Notificações
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'perfil' %}" class="{% if request.resolver_match.url_name == 'perfil' %}active{% endif %}">
+                        <i class="fa-solid fa-user"></i> Perfil
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
 </html>

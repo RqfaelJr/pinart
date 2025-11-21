@@ -1,5 +1,4 @@
 <style>
-    /* ======== ESTILOS DO MODAL (Mantido igual, com adições para o grid) ======== */
     .modal-overlay {
         display: none;
         position: fixed;
@@ -15,7 +14,7 @@
     .modal-content {
         background: #fff;
         width: 90%;
-        max-width: 700px; /* Aumentei um pouco a largura para o endereço caber bem */
+        max-width: 700px;
         border-radius: 20px;
         box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         transform: translateY(20px);
@@ -55,16 +54,15 @@
         border-radius: 0 0 20px 20px;
     }
 
-    /* GRID SYSTEM PARA O ENDEREÇO */
     .form-row {
         display: flex;
         gap: 15px;
         margin-bottom: 15px;
     }
     
-    .col-sm { flex: 1; } /* Pequeno/Automático */
-    .col-md { flex: 2; } /* Médio */
-    .col-lg { flex: 3; } /* Grande */
+    .col-sm { flex: 1; }
+    .col-md { flex: 2; } 
+    .col-lg { flex: 3; } 
 
     .section-title {
         font-size: 14px;
@@ -77,7 +75,7 @@
         padding-bottom: 5px;
     }
 
-    /* Reutilizando seus estilos de input */
+    
     .modal-body input {
         width: 100%;
         padding: 10px 15px;
@@ -85,7 +83,7 @@
         border-radius: 8px;
         border: 1px solid #d8c9f7;
         background: #faf7ff;
-        box-sizing: border-box; /* Importante para o padding não estourar o width */
+        box-sizing: border-box; 
     }
     
     .modal-body label {
@@ -107,7 +105,6 @@
         <div class="modal-body">
             <form id="formNovoLocal">
                 
-                <!-- DADOS DO LOCAL -->
                 <div class="section-title" style="margin-top: 0;">Dados do Local</div>
                 
                 <div style="margin-bottom: 15px;">
@@ -126,7 +123,6 @@
                     </div>
                 </div>
 
-                <!-- DADOS DO ENDEREÇO -->
                 <div class="section-title">Endereço</div>
 
                 <div class="form-row">
@@ -172,13 +168,12 @@
 
         <div class="modal-footer">
             <button type="button" class="btn-secondary" onclick="fecharModalLocal()">Cancelar</button>
-            <button type="button" class="btn-primary" onclick="salvarLocalViaAjax()">Salvar Tudo</button>
+            <button type="button" class="btn-primary" onclick="salvarLocal())">Salvar Tudo</button>
         </div>
     </div>
 </div>
 
 <script>
-    // --- Lógica do Modal (Abrir/Fechar) ---
     function abrirModalLocal() {
         const modal = document.getElementById('modalLocal');
         modal.style.display = 'flex';
@@ -199,7 +194,6 @@
         if (e.target === this) fecharModalLocal();
     });
 
-    // --- Lógica de Buscar CEP (Opcional, mas muito útil) ---
     function buscarCep(cep) {
         cep = cep.replace(/\D/g, '');
         if (cep.length === 8) {
@@ -217,20 +211,16 @@
         }
     }
 
-    // --- Lógica de Salvar ---
-    function salvarLocalViaAjax() {
+    function salvarLocal() {
         const btnSalvar = document.querySelector('#modalLocal .btn-primary');
         const originalText = btnSalvar.innerText;
         const errorDiv = document.getElementById('modalError');
         
-        // 1. Coleta Dados do Local
         const localData = {
             nome: document.getElementById('modal_nome').value,
             cnpj: document.getElementById('modal_cnpj').value,
             link: document.getElementById('modal_link').value,
         };
-
-        // 2. Coleta Dados do Endereço
         const enderecoData = {
             cep: document.getElementById('modal_cep').value,
             rua: document.getElementById('modal_rua').value,
@@ -241,7 +231,6 @@
             estado: document.getElementById('modal_estado').value,
         };
 
-        // Validação simples no Front
         if (!localData.nome || !enderecoData.rua || !enderecoData.numero || !enderecoData.cidade) {
             errorDiv.innerText = "Por favor, preencha os campos obrigatórios (Nome, Rua, Número, Cidade).";
             errorDiv.style.display = 'block';
@@ -252,7 +241,6 @@
         btnSalvar.disabled = true;
         errorDiv.style.display = 'none';
 
-        // 3. Envia TUDO num único objeto
         const payload = {
             local: localData,
             endereco: enderecoData
@@ -271,7 +259,6 @@
             return response.json();
         })
         .then(data => {
-            // Sucesso! Adiciona ao select e fecha
             const selectLocal = document.getElementById('id_local');
             if (selectLocal) {
                 const option = new Option(data.nome, data.id, true, true);
@@ -283,7 +270,6 @@
         .catch(error => {
             console.error('Erro:', error);
             let msg = "Erro ao salvar.";
-            // Tenta pegar erro específico do backend se houver
             if (error.errors) msg = JSON.stringify(error.errors); 
             else if (error.message) msg = error.message;
             

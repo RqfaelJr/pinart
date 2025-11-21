@@ -11,7 +11,6 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <!-- IMAGEM -->
         <div class="form-card">
             <label class="form-label">Imagem do Evento</label>
             <div class="image-upload-area">
@@ -20,13 +19,11 @@
             </div>
         </div>
 
-        <!-- TÍTULO -->
         <div class="form-card">
             <label class="form-label">Título do Evento</label>
             {{ form.titulo }}
         </div>
 
-        <!-- DESCRIÇÃO -->
         <div class="form-card">
             <label class="form-label">Descrição</label>
             {{ form.descricao }}
@@ -47,7 +44,6 @@
             <label class="form-label">Local</label>
             <div class="input-group">
                 {{ form.local }}
-                <!-- Ao clicar, chama a função abrirModalLocal() em vez de ir para outra página -->
                 <button type="button" class="btn-add" onclick="abrirModalLocal()" title="Adicionar novo local">
                     +
                 </button>
