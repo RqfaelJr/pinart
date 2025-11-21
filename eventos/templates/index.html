@@ -1,11 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends 'base.html' %}
+    {% load static %}
+
+
+        {% block title %}Início - PinArt{% endblock %}
+
+
+        {% block content %}
+        <section class="hero">
+            <h1>Descubra Eventos Incríveis</h1>
+            <p>Conecte-se com experiências que você ama</p>
+            <div class="search-box">
+                <form method="get">
+                    <input type="text" name="q" placeholder="Buscar eventos, locais, categorias...">
+                </form>
+            </div>
+        </section>
+
+
+        <section class="categories">
+            <h2>Categorias</h2>
+            <div class="category-list">
+                <a href="?categoria=" class="{% if not categoria_selecionada %}active{% endif %}">Todos</a>
+                {% for cat in categorias %}
+                <a href="?categoria={{ cat.id }}" class="{% if categoria_selecionada == cat.id %}active{% endif %}">{{ cat.nome }}</a>
+                {% endfor %}
+            </div>
+        </section>
+
+
+        <section class="popular-events">
+            <h2>Eventos</h2>
+
+            <div class="events-container">
+            {% for event in eventos %}
+            <div class="event-card">
+            <img src="{{ event.imagem.url }}" class="event-image">
+            <div class="content">
+                {% for cat in event.categorias.all %}
+                <span class="tag">{{ cat.nome }}</span>
+                {% endfor %}
+                <h3>{{ event.titulo }}</h3>
+                <p class="date">📅 {{ event.data_hora_inicio|date:'d/m/Y H:i' }}</p>
+                <p class="location">📍 {{ event.local.nome }}</p>
+                <p class="participants">👥 Capacidade: {{ event.capacidade }}</p>
+            </div>
+            <div class="price">Gratuito</div>
+            </div>
+                {% empty %}
+                <p>Nenhum evento encontrado.</p>
+                {% endfor %}
+            </div>
+        </section>
+{% endblock %}

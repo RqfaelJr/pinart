@@ -1,8 +1,9 @@
 {% extends "base_cadastro.html" %}
 {% block title %}Cadastro Participante — PinArt{% endblock %}
 {% block header %}Cadastro — Participante{% endblock %}
-
+{% load static %}
 {% block content %}
+  <link rel="stylesheet" href="{% static 'css/form.css' %}">
   <p class="small">Preencha os dados para criar a conta de Participante.</p>
 
   <form method="post" novalidate>

@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- CSS Específico desta tela -->
+<style>
+    .notificacoes-page {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Cabeçalho da seção */
+    .notificacoes-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .page-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #4b2aad; /* Roxo PinArt */
+        margin: 0;
+    }
+
+    .mark-all-read {
+        color: #8b5cf6;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: opacity 0.2s;
+        cursor: pointer;
+        border: none;
+        background: none;
+    }
+
+    .mark-all-read:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+
+    /* Lista de Cards */
+    .notificacoes-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .notificacao-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border: 1px solid #f0f0f0;
+        position: relative;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .notificacao-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    /* Estilo para NÃO LIDA (borda roxa e bolinha) */
+    .notificacao-card.unread {
+        border-left: 5px solid #d946ef; /* Roxo/Rosa neon da imagem */
+    }
+
+    .unread-dot {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 8px;
+        height: 8px;
+        background-color: #d946ef;
+        border-radius: 50%;
+    }
+
+    /* Ícones */
+    .notif-icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 20px;
+    }
+
+    /* Variações de cores dos ícones conforme o tipo */
+    .icon-evento { background-color: #f3e8ff; color: #9333ea; } /* Roxo */
+    .icon-social { background-color: #dbeafe; color: #2563eb; } /* Azul */
+    .icon-alerta { background-color: #ffedd5; color: #ea580c; } /* Laranja */
+
+    /* Conteúdo do Texto */
+    .notif-content {
+        flex-grow: 1;
+    }
+
+    .notif-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #333;
+        margin: 0 0 5px 0;
+    }
+
+    .notif-message {
+        font-size: 14px;
+        color: #666;
+        margin: 0 0 8px 0;
+        line-height: 1.4;
+    }
+
+    .notif-time {
+        font-size: 12px;
+        color: #999;
+    }
+
+    /* Estado vazio */
+    .empty-state {
+        text-align: center;
+        padding: 50px;
+        color: #999;
+    }
+</style>
+
+<div class="notificacoes-page">
+    
+    <div class="notificacoes-header">
+        <h1 class="page-title">Notificações</h1>
+        
+        {% if notificacoes %}
+        <form action="{% url 'marcar_todas_lidas' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="mark-all-read">
+                <span>✓</span> Marcar todas como lidas
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    <div class="notificacoes-list">
+        {% for notif in notificacoes %}
+            <!-- Adiciona a classe 'unread' se a notificação não foi lida -->
+            <div class="notificacao-card {% if not notif.lida %}unread{% endif %}">
+                
+                <!-- Lógica de Ícones baseada no tipo -->
+                <div class="notif-icon-box 
+                    {% if notif.tipo == 'evento' %}icon-evento
+                    {% elif notif.tipo == 'social' %}icon-social
+                    {% else %}icon-alerta{% endif %}">
+                    
+                    {% if notif.tipo == 'evento' %}
+                        <i class="fa-regular fa-calendar"></i> <!-- Ícone Calendário -->
+                    {% elif notif.tipo == 'social' %}
+                        <i class="fa-regular fa-user"></i> <!-- Ícone Usuário -->
+                    {% else %}
+                        <i class="fa-regular fa-bell"></i> <!-- Ícone Sino -->
+                    {% endif %}
+                </div>
+
+                <div class="notif-content">
+                    <h3 class="notif-title">{{ notif.titulo }}</h3>
+                    <p class="notif-message">{{ notif.mensagem }}</p>
+                    <span class="notif-time">{{ notif.data_hora|timesince }} atrás</span>
+                </div>
+
+                {% if not notif.lida %}
+                    <div class="unread-dot" title="Não lida"></div>
+                {% endif %}
+            </div>
+        {% empty %}
+            <div class="empty-state">
+                <i class="fa-regular fa-bell-slash" style="font-size: 40px; margin-bottom: 15px;"></i>
+                <p>Você não tem novas notificações no momento.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<!-- Se você não usa FontAwesome no base.html, descomente a linha abaixo -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
+
+{% endblock %}

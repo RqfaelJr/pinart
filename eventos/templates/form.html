@@ -1,135 +1,81 @@
-<!-- Template genérico usado pelas views de criação/edição (Criar Local / Mídia / Categoria / Evento / Avaliação) -->
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="utf-8">
-    <title>{{ title|default:"Formulário" }}</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <style>
-        body{font-family: Arial, sans-serif;max-width:800px;margin:2rem auto;padding:0 1rem;}
-        label{display:block;margin-top:0.75rem;font-weight:600;}
-        .field{margin-bottom:0.5rem;}
-        .errors{color:#b00020;margin:0.25rem 0 0.75rem;}
-        .inline-links{font-size:0.9rem;margin-top:0.25rem;}
-        .btn{display:inline-block;padding:0.5rem 1rem;background:#1976d2;color:#fff;border-radius:4px;text-decoration:none;border:none;cursor:pointer;}
-        .btn-muted{background:#999;}
-    </style>
-</head>
-<body>
-    <h1>{{ title|default:"Formulário" }}</h1>
+{% extends "base.html" %}
+{% load static %}
 
-    {% if form.non_field_errors %}
-        <div class="errors">
-            <ul>
-            {% for err in form.non_field_errors %}
-                <li>{{ err }}</li>
-            {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
 
-    <form method="post" novalidate>
+<div class="form-container">
+
+    <h1 class="page-title">Criar Evento</h1>
+
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {# redirecionamento usado pelas views auxiliares (create_local etc.) #}
-        {% if next %}
-            <input type="hidden" name="next" value="{{ next }}">
-        {% endif %}
 
-        {# Campo título (se existir no form) #}
-        {% if form.titulo %}
-            <div class="field">
-                {{ form.titulo.label_tag }}
-                {{ form.titulo }}
-                {% if form.titulo.errors %}<div class="errors">{{ form.titulo.errors|join:", " }}</div>{% endif %}
+        <!-- IMAGEM -->
+        <div class="form-card">
+            <label class="form-label">Imagem do Evento</label>
+            <div class="image-upload-area">
+                {{ form.imagem }}
+                <p>Clique para adicionar uma imagem<br><span>PNG, JPG ou GIF (max. 10MB)</span></p>
             </div>
-        {% endif %}
-
-        {# Descrição #}
-        {% if form.descricao %}
-            <div class="field">
-                {{ form.descricao.label_tag }}
-                {{ form.descricao }}
-                {% if form.descricao.errors %}<div class="errors">{{ form.descricao.errors|join:", " }}</div>{% endif %}
-            </div>
-        {% endif %}
-
-        {# Datas #}
-        {% if form.data_hora_inicio %}
-            <div class="field">
-                {{ form.data_hora_inicio.label_tag }}
-                {{ form.data_hora_inicio }}
-                {% if form.data_hora_inicio.errors %}<div class="errors">{{ form.data_hora_inicio.errors|join:", " }}</div>{% endif %}
-            </div>
-        {% endif %}
-        {% if form.data_hora_fim %}
-            <div class="field">
-                {{ form.data_hora_fim.label_tag }}
-                {{ form.data_hora_fim }}
-                {% if form.data_hora_fim.errors %}<div class="errors">{{ form.data_hora_fim.errors|join:", " }}</div>{% endif %}
-            </div>
-        {% endif %}
-
-        {# Capacidade #}
-        {% if form.capacidade %}
-            <div class="field">
-                {{ form.capacidade.label_tag }}
-                {{ form.capacidade }}
-                {% if form.capacidade.errors %}<div class="errors">{{ form.capacidade.errors|join:", " }}</div>{% endif %}
-            </div>
-        {% endif %}
-
-        {# Local: select + link para criar novo local retornando ao formulário #}
-        {% if form.local %}
-            <div class="field">
-                {{ form.local.label_tag }}
-                {{ form.local }}
-                {% if form.local.errors %}<div class="errors">{{ form.local.errors|join:", " }}</div>{% endif %}
-
-                {% if next_local %}
-                    <div class="inline-links">
-                        <a href="{{ next_local }}">+ Cadastrar novo local</a>
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-
-        {# Categorias: checkbox múltiplo e link para criar novas categorias #}
-        {% if form.categorias %}
-            <div class="field">
-                {{ form.categorias.label_tag }}
-                {{ form.categorias }}
-                {% if form.categorias.errors %}<div class="errors">{{ form.categorias.errors|join:", " }}</div>{% endif %}
-
-                {% if next_categoria %}
-                    <div class="inline-links">
-                        <a href="{{ next_categoria }}">+ Cadastrar nova categoria</a>
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-
-        {# Campos genéricos para outros forms (mídia, avaliação, etc.) - renderiza o restante automaticamente #}
-        {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-
-        {% for field in form.visible_fields %}
-            {% if not field.name in "titulo descricao data_hora_inicio data_hora_fim capacidade local categorias" %}
-                <div class="field">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {% if field.errors %}<div class="errors">{{ field.errors|join:", " }}</div>{% endif %}
-                </div>
-            {% endif %}
-        {% endfor %}
-
-        <div style="margin-top:1rem;">
-            <button type="submit" class="btn">Salvar</button>
-            <a href="{% url 'home' %}" class="btn btn-muted" style="margin-left:0.5rem;">Cancelar</a>
-            {% if next_midia %}
-                <a href="{{ next_midia }}" style="margin-left:1rem;">Cadastrar Mídia</a>
-            {% endif %}
         </div>
+
+        <!-- TÍTULO -->
+        <div class="form-card">
+            <label class="form-label">Título do Evento</label>
+            {{ form.titulo }}
+        </div>
+
+        <!-- DESCRIÇÃO -->
+        <div class="form-card">
+            <label class="form-label">Descrição</label>
+            {{ form.descricao }}
+        </div>
+
+       <div class="two-columns">
+            <div class="form-card">
+                <label class="form-label">Início</label>
+                {{ form.data_hora_inicio }}
+            </div>
+            <div class="form-card">
+                <label class="form-label">Fim</label>
+                {{ form.data_hora_fim }}
+            </div>
+        </div>
+
+        <div class="form-card">
+            <label class="form-label">Local</label>
+            <div class="input-group">
+                {{ form.local }}
+                <!-- Ao clicar, chama a função abrirModalLocal() em vez de ir para outra página -->
+                <button type="button" class="btn-add" onclick="abrirModalLocal()" title="Adicionar novo local">
+                    +
+                </button>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <div class="label-with-action">
+                <label class="form-label">Categorias</label>
+                <a href="{% url 'create_categoria' %}" class="btn-add-small" title="Nova categoria" target="_blank">
+                    + Nova
+                </a>
+            </div>
+            
+            <div class="category-container">
+                {% for cat in form.categorias %}
+                    <label class="category-chip">
+                        {{ cat.tag }} <span>{{ cat.choice_label }}</span> </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn-primary">Salvar</button>
+            <a href="{% url 'home' %}" class="btn-secondary">Cancelar</a>
+        </div>
+
     </form>
-</body>
-</html>
+</div>
+{% include 'includes/modal_local.html' %}
+{% endblock %}

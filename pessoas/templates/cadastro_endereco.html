@@ -1,55 +1,112 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Cadastrar Endereço</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-        .form-group { margin-bottom: 12px; }
-        label { display: block; font-weight: bold; margin-bottom: 6px; }
-        input { width: 100%; padding: 8px; box-sizing: border-box; }
-        .btn {
-            padding: 10px 18px;
-            border: none;
-            cursor: pointer;
-            border-radius: 6px;
-            margin-top: 10px;
-        }
-        .btn-primary { background: #4CAF50; color: white; }
-        .btn-secondary { background: #ddd; }
-        .errorlist { color: #c00; margin: 0; padding: 0; }
-    </style>
-</head>
-<body>
+{% extends "base_cadastro.html" %}
+{% block title %}Cadastro de Endereço — PinArt{% endblock %}
+{% block header %}Cadastro — Endereço{% endblock %}
 
-    <h2>Cadastrar Endereço</h2>
+{% block content %}
+  <p class="small">Preencha o endereço abaixo. Após salvar, você retornará automaticamente ao cadastro anterior.</p>
 
-    <form method="POST">
-        {% csrf_token %}
+  <form method="post" novalidate>
+    {% csrf_token %}
 
-        {% for field in form %}
-            <div class="form-group">
-                <label>{{ field.label }}</label>
-                {{ field }}
-                {% if field.errors %}
-                    <div class="errorlist">{{ field.errors|striptags }}</div>
-                {% endif %}
-            </div>
-        {% endfor %}
+    {% if form.non_field_errors %}
+      <div class="errors">
+        {% for e in form.non_field_errors %}{{ e }}<br>{% endfor %}
+      </div>
+    {% endif %}
 
-        <input type="hidden" name="next" value="{{ next }}">
+    <div class="form-row">
+      <label for="id_cep">CEP</label>
+      {{ form.cep }}
+      {% if form.cep.errors %}
+        <div class="field-error">{{ form.cep.errors|striptags }}</div>
+      {% endif %}
+    </div>
 
-        <button type="submit" class="btn btn-primary">Salvar Endereço</button>
+    <div class="form-row">
+      <label for="id_rua">Rua</label>
+      {{ form.rua }}
+      {% if form.rua.errors %}
+        <div class="field-error">{{ form.rua.errors|striptags }}</div>
+      {% endif %}
+    </div>
 
-        <a href="{{ next }}" class="btn btn-secondary">Cancelar</a>
-    </form>
+    <div class="form-row">
+      <label for="id_numero">Número</label>
+      {{ form.numero }}
+      {% if form.numero.errors %}
+        <div class="field-error">{{ form.numero.errors|striptags }}</div>
+      {% endif %}
+    </div>
 
-</body>
-</html>
+    <div class="form-row">
+      <label for="id_complemento">Complemento</label>
+      {{ form.complemento }}
+      {% if form.complemento.errors %}
+        <div class="field-error">{{ form.complemento.errors|striptags }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-row">
+      <label for="id_bairro">Bairro</label>
+      {{ form.bairro }}
+      {% if form.bairro.errors %}
+        <div class="field-error">{{ form.bairro.errors|striptags }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-row">
+      <label for="id_cidade">Cidade</label>
+      {{ form.cidade }}
+      {% if form.cidade.errors %}
+        <div class="field-error">{{ form.cidade.errors|striptags }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-row">
+      <label for="id_estado">Estado</label>
+      {{ form.estado }}
+      {% if form.estado.errors %}
+        <div class="field-error">{{ form.estado.errors|striptags }}</div>
+      {% endif %}
+    </div>
+
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+    <p style="margin-top:14px">
+      <button class="btn" type="submit">Salvar endereço</button>
+      <a class="btn secondary" href="{{ request.GET.next }}">Voltar sem salvar</a>
+    </p>
+  </form>
+
+  <!-- VIA CEP SCRIPT -->
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const cepInput = document.querySelector("#id_cep");
+
+      cepInput.addEventListener("blur", function () {
+          let cep = cepInput.value.replace(/\D/g, "");
+
+          if (cep.length !== 8) {
+              return;
+          }
+
+          fetch(`https://viacep.com.br/ws/${cep}/json/`)
+              .then(response => response.json())
+              .then(data => {
+                  if (!data.erro) {
+                      document.querySelector("#id_rua").value = data.logradouro;
+                      document.querySelector("#id_bairro").value = data.bairro;
+                      document.querySelector("#id_cidade").value = data.localidade;
+                      document.querySelector("#id_estado").value = data.uf;
+                  } else {
+                      alert("CEP não encontrado!");
+                  }
+              })
+              .catch(() => {
+                  alert("Erro ao consultar o CEP.");
+              });
+      });
+  });
+  </script>
+
+{% endblock %}

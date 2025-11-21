@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}PinArt{% endblock %}</title>
+
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    </head>
+    <body>
+        <header class="navbar">
+    <div class="logo">PinArt</div>
+    <img src="{% static 'img/logo.png' %}" alt="PinArt" class="logo-img">
+    <nav>
+        <ul>
+            <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Início</a></li>
+            <li><a href="#">Feed</a></li>
+            <li><a href="#">Mapa</a></li>
+            <!-- Botão criar evento -->
+            <li><a href="{% url 'create_evento' %}" class="btn-criar-evento">Criar Evento</a></li>
+            
+            <!-- LINK CORRIGIDO AQUI -->
+            <li>
+                <a href="{% url 'lista_notificacoes' %}" class="{% if request.resolver_match.url_name == 'lista_notificacoes' %}active{% endif %}">
+                    Notificações
+                </a>
+            </li>
+            
+            <li><a href="#">Perfil</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+        {% block content %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,298 @@
+<style>
+    /* ======== ESTILOS DO MODAL (Mantido igual, com adições para o grid) ======== */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(75, 42, 173, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal-content {
+        background: #fff;
+        width: 90%;
+        max-width: 700px; /* Aumentei um pouco a largura para o endereço caber bem */
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+        max-height: 90vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-overlay.active { display: flex; opacity: 1; }
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+
+    .modal-header {
+        background: #f8f5ff;
+        padding: 20px 30px;
+        border-bottom: 1px solid #e7dafb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 20px 20px 0 0;
+    }
+
+    .modal-title { font-size: 20px; font-weight: 700; color: #4b2aad; margin: 0; }
+    .btn-close { background: none; border: none; font-size: 24px; color: #999; cursor: pointer; }
+    .btn-close:hover { color: #f00; }
+
+    .modal-body { padding: 30px; overflow-y: auto; }
+
+    .modal-footer {
+        padding: 20px 30px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        background: #fff;
+        border-radius: 0 0 20px 20px;
+    }
+
+    /* GRID SYSTEM PARA O ENDEREÇO */
+    .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .col-sm { flex: 1; } /* Pequeno/Automático */
+    .col-md { flex: 2; } /* Médio */
+    .col-lg { flex: 3; } /* Grande */
+
+    .section-title {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #8b5cf6;
+        font-weight: bold;
+        margin: 25px 0 15px 0;
+        border-bottom: 1px solid #e7dafb;
+        padding-bottom: 5px;
+    }
+
+    /* Reutilizando seus estilos de input */
+    .modal-body input {
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 14px;
+        border-radius: 8px;
+        border: 1px solid #d8c9f7;
+        background: #faf7ff;
+        box-sizing: border-box; /* Importante para o padding não estourar o width */
+    }
+    
+    .modal-body label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #4b2aad;
+        font-size: 13px;
+    }
+</style>
+
+<div id="modalLocal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Novo Local e Endereço</h3>
+            <button type="button" class="btn-close" onclick="fecharModalLocal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form id="formNovoLocal">
+                
+                <!-- DADOS DO LOCAL -->
+                <div class="section-title" style="margin-top: 0;">Dados do Local</div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label>Nome do Local</label>
+                    <input type="text" id="modal_nome" required placeholder="Ex: Centro de Eventos PinArt">
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md">
+                        <label>CNPJ</label>
+                        <input type="text" id="modal_cnpj" placeholder="00.000.000/0001-00">
+                    </div>
+                    <div class="col-lg">
+                        <label>Link (Google Maps)</label>
+                        <input type="url" id="modal_link" placeholder="https://maps...">
+                    </div>
+                </div>
+
+                <!-- DADOS DO ENDEREÇO -->
+                <div class="section-title">Endereço</div>
+
+                <div class="form-row">
+                    <div class="col-sm" style="flex: 1;">
+                        <label>CEP</label>
+                        <input type="text" id="modal_cep" placeholder="00000-000" onblur="buscarCep(this.value)">
+                    </div>
+                    <div class="col-lg" style="flex: 3;">
+                        <label>Rua / Logradouro</label>
+                        <input type="text" id="modal_rua" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-sm">
+                        <label>Número</label>
+                        <input type="text" id="modal_numero" required>
+                    </div>
+                    <div class="col-md">
+                        <label>Complemento</label>
+                        <input type="text" id="modal_complemento">
+                    </div>
+                    <div class="col-md">
+                        <label>Bairro</label>
+                        <input type="text" id="modal_bairro" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-lg">
+                        <label>Cidade</label>
+                        <input type="text" id="modal_cidade" required>
+                    </div>
+                    <div class="col-sm">
+                        <label>UF</label>
+                        <input type="text" id="modal_estado" placeholder="SC" maxlength="2" style="text-transform: uppercase;" required>
+                    </div>
+                </div>
+
+            </form>
+            <div id="modalError" style="color: red; margin-top: 10px; display: none; font-size: 14px; text-align: center;"></div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn-secondary" onclick="fecharModalLocal()">Cancelar</button>
+            <button type="button" class="btn-primary" onclick="salvarLocalViaAjax()">Salvar Tudo</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Lógica do Modal (Abrir/Fechar) ---
+    function abrirModalLocal() {
+        const modal = document.getElementById('modalLocal');
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
+    }
+
+    function fecharModalLocal() {
+        const modal = document.getElementById('modalLocal');
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.getElementById('formNovoLocal').reset();
+            document.getElementById('modalError').style.display = 'none';
+        }, 300);
+    }
+
+    document.getElementById('modalLocal').addEventListener('click', function(e) {
+        if (e.target === this) fecharModalLocal();
+    });
+
+    // --- Lógica de Buscar CEP (Opcional, mas muito útil) ---
+    function buscarCep(cep) {
+        cep = cep.replace(/\D/g, '');
+        if (cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('modal_rua').value = data.logradouro;
+                        document.getElementById('modal_bairro').value = data.bairro;
+                        document.getElementById('modal_cidade').value = data.localidade;
+                        document.getElementById('modal_estado').value = data.uf;
+                        document.getElementById('modal_numero').focus();
+                    }
+                });
+        }
+    }
+
+    // --- Lógica de Salvar ---
+    function salvarLocalViaAjax() {
+        const btnSalvar = document.querySelector('#modalLocal .btn-primary');
+        const originalText = btnSalvar.innerText;
+        const errorDiv = document.getElementById('modalError');
+        
+        // 1. Coleta Dados do Local
+        const localData = {
+            nome: document.getElementById('modal_nome').value,
+            cnpj: document.getElementById('modal_cnpj').value,
+            link: document.getElementById('modal_link').value,
+        };
+
+        // 2. Coleta Dados do Endereço
+        const enderecoData = {
+            cep: document.getElementById('modal_cep').value,
+            rua: document.getElementById('modal_rua').value,
+            numero: document.getElementById('modal_numero').value,
+            complemento: document.getElementById('modal_complemento').value,
+            bairro: document.getElementById('modal_bairro').value,
+            cidade: document.getElementById('modal_cidade').value,
+            estado: document.getElementById('modal_estado').value,
+        };
+
+        // Validação simples no Front
+        if (!localData.nome || !enderecoData.rua || !enderecoData.numero || !enderecoData.cidade) {
+            errorDiv.innerText = "Por favor, preencha os campos obrigatórios (Nome, Rua, Número, Cidade).";
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        btnSalvar.innerText = "Salvando...";
+        btnSalvar.disabled = true;
+        errorDiv.style.display = 'none';
+
+        // 3. Envia TUDO num único objeto
+        const payload = {
+            local: localData,
+            endereco: enderecoData
+        };
+
+        fetch("{% url 'create_local' %}", { 
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            if (!response.ok) return response.json().then(err => { throw err; });
+            return response.json();
+        })
+        .then(data => {
+            // Sucesso! Adiciona ao select e fecha
+            const selectLocal = document.getElementById('id_local');
+            if (selectLocal) {
+                const option = new Option(data.nome, data.id, true, true);
+                selectLocal.add(option);
+                selectLocal.dispatchEvent(new Event('change'));
+            }
+            fecharModalLocal();
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            let msg = "Erro ao salvar.";
+            // Tenta pegar erro específico do backend se houver
+            if (error.errors) msg = JSON.stringify(error.errors); 
+            else if (error.message) msg = error.message;
+            
+            errorDiv.innerText = msg;
+            errorDiv.style.display = 'block';
+        })
+        .finally(() => {
+            btnSalvar.innerText = originalText;
+            btnSalvar.disabled = false;
+        });
+    }
+</script>

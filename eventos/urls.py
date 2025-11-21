@@ -8,4 +8,6 @@ urlpatterns = [
     path('categoria/new/', views.create_categoria, name='create_categoria'),
     path('evento/new/', views.create_evento, name='create_evento'),
     path('avaliacao/new/', views.create_avaliacao, name='create_avaliacao'),
+    path('notificacoes/', views.lista_notificacoes, name='lista_notificacoes'),
+    path('notificacoes/marcar_todas_lidas/', views.marcar_todas_lidas, name='marcar_todas_lidas'),
 ]
