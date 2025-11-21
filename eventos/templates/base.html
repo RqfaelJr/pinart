@@ -7,7 +7,6 @@
     
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -35,7 +34,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="{% url 'mapa' %}" class="btn-mapa {% if request.resolver_match.url_name == 'mapa' %}active{% endif %}">
                         <i class="fa-solid fa-map-location-dot"></i> Mapa
                     </a>
                 </li>

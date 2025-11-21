@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/mapa.css' %}">
+
+<div class="map-page-container">
+    
+    <div class="map-controls-bar">
+        <h1 class="page-title">Mapa de Eventos</h1>
+        
+        <div class="view-toggle">
+            <button class="toggle-btn active" onclick="switchView('map')" id="btn-map">
+                <i class="fa-solid fa-map"></i> Mapa
+            </button>
+            <button class="toggle-btn" onclick="switchView('list')" id="btn-list">
+                <i class="fa-solid fa-list"></i> Lista
+            </button>
+        </div>
+    </div>
+
+    <div class="search-bar-container" id="search-container">
+        <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" class="search-input" placeholder="Buscar por localização, evento...">
+        </div>
+        <button class="btn-search">Buscar</button>
+        <button class="btn-filter"><i class="fa-solid fa-filter"></i></button>
+    </div>
+
+    <div id="map"></div>
+
+    <button class="btn-locate-me" onclick="localizarUsuario()" title="Onde estou?">
+        <i class="fa-solid fa-crosshairs"></i>
+    </button>
+
+    <div class="map-legend" id="legend-container">
+        <span class="legend-title">Legenda</span>
+        <div class="legend-item"><span class="dot pin-musica"></span> Música</div>
+        <div class="legend-item"><span class="dot pin-cultura"></span> Cultura</div>
+        <div class="legend-item"><span class="dot pin-educacao"></span> Educação</div>
+        <div class="legend-item"><span class="dot pin-gastronomia"></span> Gastronomia</div>
+        <div class="legend-item"><span class="dot pin-outros"></span> Outros</div>
+    </div>
+
+    <div id="list-view">
+        {% for evento in eventos %}
+        <div class="event-card-list">
+            <div style="width: 120px; height: 120px; background: #eee; border-radius: 10px; overflow: hidden;">
+                 {% if evento.imagem %}
+                    <img src="{{ evento.imagem.url }}" style="width:100%; height:100%; object-fit:cover;">
+                 {% endif %}
+            </div>
+            <div>
+                <h3 style="margin: 0 0 10px 0; color: #4b2aad;">{{ evento.titulo }}</h3>
+                <p style="color: #666; font-size: 14px; margin-bottom: 5px;"><i class="fa-solid fa-location-dot"></i> {{ evento.local.nome }}</p>
+                <p style="color: #666; font-size: 14px;"><i class="fa-regular fa-calendar"></i> {{ evento.data_hora_inicio|date:"d/m/Y H:i" }}</p>
+                <a href="{% url 'detalhe_evento' evento.id %}" class="btn-primary" style="padding: 8px 15px; font-size: 12px; margin-top: 10px; display: inline-block; text-decoration: none;">Ver Detalhes</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+{{ eventos_json|json_script:"eventos-data" }}
+
+<script>
+    var map = L.map('map').setView([-28.9355, -49.4908], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var userMarker = null;
+
+    function localizarUsuario() {
+        map.locate({setView: true, maxZoom: 16});
+    }
+
+    function onLocationFound(e) {
+        var radius = e.accuracy / 2;
+
+        if (userMarker) {
+            map.removeLayer(userMarker);
+        }
+
+        userMarker = L.circleMarker(e.latlng, {
+            radius: 8,
+            fillColor: "#3388ff",
+            color: "#fff",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(map)
+        .bindPopup("Você está aqui! (Precisão: " + Math.round(radius) + "m)").openPopup();
+
+        L.circle(e.latlng, radius).addTo(map);
+    }
+
+    function onLocationError(e) {
+        console.log("Erro de geolocalização: " + e.message);
+    }
+
+    map.on('locationfound', onLocationFound);
+    map.on('locationerror', onLocationError);
+
+    localizarUsuario();
+
+
+    function createCustomIcon(categoria) {
+        let colorClass = 'pin-outros';
+        let iconClass = 'fa-star'; 
+
+        const cat = categoria.toLowerCase();
+        if (cat.includes('música') || cat.includes('show')) {
+            colorClass = 'pin-musica'; iconClass = 'fa-music';
+        } else if (cat.includes('cultura') || cat.includes('arte')) {
+            colorClass = 'pin-cultura'; iconClass = 'fa-palette';
+        } else if (cat.includes('educação') || cat.includes('workshop')) {
+            colorClass = 'pin-educacao'; iconClass = 'fa-graduation-cap';
+        } else if (cat.includes('gastronomia') || cat.includes('comida')) {
+            colorClass = 'pin-gastronomia'; iconClass = 'fa-utensils';
+        }
+
+        return L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div class='custom-pin ${colorClass}' style='width: 36px; height: 36px;'><i class='fa-solid ${iconClass}'></i></div>`,
+            iconSize: [36, 36],
+            iconAnchor: [18, 36],
+            popupAnchor: [0, -40]
+        });
+    }
+
+    const eventosData = JSON.parse(document.getElementById('eventos-data').textContent);
+
+    eventosData.forEach(evento => {
+        if (evento.lat && evento.lng) {
+            const marker = L.marker([evento.lat, evento.lng], {
+                icon: createCustomIcon(evento.categoria)
+            }).addTo(map);
+
+            const popupContent = `
+                <div style="text-align: center; width: 200px;">
+                    <h3 style="margin: 0 0 5px 0; color: #4b2aad; font-size: 16px;">${evento.titulo}</h3>
+                    <p style="margin: 5px 0; font-size: 13px; color: #666;">${evento.local_nome}</p>
+                    <p style="font-weight: bold; margin: 5px 0; font-size: 12px;">${evento.data}</p>
+                    <a href="${evento.url}" style="display: inline-block; margin-top: 8px; color: #8b5cf6; text-decoration: none; font-weight: bold; font-size: 13px;">
+                        Ver Detalhes &rarr;
+                    </a>
+                </div>
+            `;
+            marker.bindPopup(popupContent);
+        }
+    });
+
+    function switchView(view) {
+        const mapDiv = document.getElementById('map');
+        const listDiv = document.getElementById('list-view');
+        const searchDiv = document.getElementById('search-container');
+        const legendDiv = document.getElementById('legend-container');
+        const locateBtn = document.querySelector('.btn-locate-me');
+        
+        const btnMap = document.getElementById('btn-map');
+        const btnList = document.getElementById('btn-list');
+
+        if (view === 'map') {
+            mapDiv.style.display = 'block';
+            listDiv.style.display = 'none';
+            searchDiv.style.display = 'flex';
+            legendDiv.style.display = 'block';
+            locateBtn.style.display = 'flex';
+            
+            btnMap.classList.add('active');
+            btnList.classList.remove('active');
+            
+            map.invalidateSize();
+        } else {
+            mapDiv.style.display = 'none';
+            listDiv.style.display = 'block';
+            searchDiv.style.display = 'none';
+            legendDiv.style.display = 'none';
+            locateBtn.style.display = 'none';
+
+            btnMap.classList.remove('active');
+            btnList.classList.add('active');
+        }
+    }
+</script>
+{% endblock %}

@@ -145,3 +145,10 @@ def listar_eventos(request):
     return render(request, 'lista_eventos.html', {
         'eventos': eventos
     })
+
+@login_required
+def mapa(request):
+    eventos = Evento.objects.all()
+    return render(request, 'mapa.html', {
+        'eventos': eventos
+    })
