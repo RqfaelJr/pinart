@@ -1,10 +1,13 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Local(models.Model):
     nome = models.CharField(max_length=100)
     cnpj = models.CharField(max_length=18, unique=True)
     link = models.URLField()
     endereco = models.ForeignKey('pessoas.Endereco', on_delete=models.SET_NULL, null=True, blank=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
 
     def __str__(self):
         return self.nome
@@ -39,7 +42,7 @@ class Evento(models.Model):
 
 class Avaliacao(models.Model):
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE, related_name='avaliacoes')
-    nota = models.IntegerField()
+    nota = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comentario = models.TextField()
     data_hora = models.DateTimeField(auto_now_add=True)
     pessoa = models.ForeignKey('pessoas.Pessoa', on_delete=models.CASCADE, related_name='avaliacoes', null=True, blank=True)

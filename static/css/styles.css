@@ -125,7 +125,11 @@ body {
     color: #7a1fff;
 }
 
-.logo img {
-    height: 40px;
-    object-fit: contain;
+.logo-img {
+    /* Define uma largura fixa. Ajuste o valor conforme necessário */
+    width: 40px;
+    
+    /* 'height: auto' é crucial! Ele garante que a imagem não fique 
+       esticada ou achatada, mantendo a proporção original */
+    height: auto; 
 }
