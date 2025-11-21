@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- CSS Específico desta tela -->
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+
+<div class="profile-page">
+    
+    <!-- 1. Cabeçalho do Perfil -->
+    <div class="profile-header">
+        <div class="profile-image-container">
+            <!-- Verifica se o usuário tem foto, senão usa uma padrão -->
+            {% if pessoa.foto %}
+                <img src="{{ pessoa.foto.url }}" alt="Foto de {{ pessoa.nome }}" class="profile-image">
+            {% else %}
+                <!-- Substitua pelo caminho da sua imagem padrão -->
+                <img src="{% static 'img/default-profile.png' %}" alt="Foto Padrão" class="profile-image">
+            {% endif %}
+        </div>
+        <h1 class="profile-name">{{ pessoa.nome }}</h1>
+        <!-- Mostra o username como um subtítulo, opcional -->
+        <p class="profile-username">@{{ request.user.username }}</p>
+    </div>
+
+    <!-- 2. Barra de Estatísticas -->
+    <div class="stats-bar">
+        <!-- Stat 1: Eventos Marcados -->
+        <div class="stat-item">
+            <div class="stat-value">
+                <i class="fa-regular fa-calendar-check"></i>
+                {{ stats.eventos_marcados }}
+            </div>
+            <div class="stat-label">Eventos Marcados</div>
+        </div>
+        <!-- Stat 2: Presenças Confirmadas -->
+        <div class="stat-item">
+            <div class="stat-value">
+                <i class="fa-solid fa-user-check"></i>
+                {{ stats.presencas_confirmadas }}
+            </div>
+            <div class="stat-label">Presenças Confirmadas</div>
+        </div>
+    </div>
+
+    <!-- 3. Seção: Próximos Eventos -->
+    <div>
+        <h2 class="section-title">
+            <i class="fa-solid fa-calendar-day"></i>
+            Próximos Eventos
+        </h2>
+        
+        <div class="event-list">
+            {% for evento in proximos_eventos %}
+                <!-- Card do Evento (Link para a página de detalhes do evento) -->
+                <a href="{% url 'detalhe_evento' evento.id %}" class="event-card">
+                    {% if evento.imagem %}
+                        <img src="{{ evento.imagem.url }}" alt="{{ evento.titulo }}" class="event-image">
+                    {% else %}
+                        <!-- Imagem placeholder se o evento não tiver imagem -->
+                        <img src="{% static 'img/event-placeholder.jpg' %}" alt="Evento sem imagem" class="event-image">
+                    {% endif %}
+                    
+                    <div class="event-details">
+                        <h3 class="event-title">{{ evento.titulo }}</h3>
+                        
+                        <div class="event-info">
+                            <i class="fa-regular fa-clock"></i>
+                            <!-- Exibe a data e hora formatadas -->
+                            <span>{{ evento.data_hora_inicio|date:"d/m/Y" }} às {{ evento.data_hora_inicio|time:"H:i" }}</span>
+                        </div>
+                        
+                        <div class="event-info">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>{{ evento.local.nome }}</span>
+                        </div>
+                    </div>
+                </a>
+            {% empty %}
+                <!-- Estado vazio se não houver próximos eventos -->
+                <div class="empty-state">
+                    <i class="fa-regular fa-calendar-xmark" style="font-size: 30px; margin-bottom: 10px;"></i>
+                    <p>Você não tem nenhum evento marcado para os próximos dias.</p>
+                    <a href="{% url 'lista_eventos' %}" style="color: #8b5cf6; font-weight: 600; text-decoration: none;">Explorar eventos</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<!-- 
+    OBSERVAÇÃO: Este template assume que você está usando FontAwesome para os ícones.
+    Se não estiver, você precisará adicionar o link no seu 'base.html' ou substituir os ícones <i> por imagens.
+    Link para adicionar no <head> do base.html:
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+-->
+
+{% endblock %}

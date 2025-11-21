@@ -128,3 +128,22 @@ def marcar_todas_lidas(request):
         Notificacao.objects.filter(pessoa=request.user.pessoa, lida=False).update(lida=True)
     
     return redirect('lista_notificacoes')
+
+@login_required
+def detalhe_evento(request, evento_id):
+    evento = Evento.objects.get(id=evento_id)
+    return render(request, 'detalhe_evento.html', {
+        'evento': evento
+    })
+@login_required
+def perfil(request):
+    pessoa = request.user.pessoa
+    return render(request, 'perfil.html', {
+        'pessoa': pessoa
+    })
+@login_required
+def listar_eventos(request):
+    eventos = Evento.objects.all()
+    return render(request, 'lista_eventos.html', {
+        'eventos': eventos
+    })
