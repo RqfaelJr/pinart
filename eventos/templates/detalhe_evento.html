@@ -11,9 +11,7 @@
         {% if evento.imagem %}
             <img src="{{ evento.imagem.url }}" alt="{{ evento.titulo }}" class="event-banner-img">
         {% else %}
-            <div class="event-banner-placeholder">
-                <i class="fa-regular fa-image"></i>
-            </div>
+            <img src="{% static 'img/evento.png' %}" class="event-image" alt="Imagem padrão">
         {% endif %}
     </div>
 

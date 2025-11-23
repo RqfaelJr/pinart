@@ -39,25 +39,34 @@
             <h2>Eventos</h2>
 
             <div class="events-container">
-            {% for event in eventos %}
-            <div class="event-card">
-            {% if event.imagem %}
-            <img src="{{ event.imagem.url }}" class="event-image" alt="{{ event.titulo }}">
-            {% else %}
-            <img src="{% static 'img/evento.png' %}" class="event-image" alt="Imagem padrão">
-            {% endif %}
-            <div class="content">
-                {% for cat in event.categorias.all %}
-                <span class="tag">{{ cat.nome }}</span>
-                {% endfor %}
-                <h3>{{ event.titulo }}</h3>
-                <p class="date">📅 {{ event.data_hora_inicio|date:'d/m/Y H:i' }}</p>
-                <p class="location">📍 {{ event.local.nome }}</p>
-                <p class="participants">👥 Capacidade: {{ event.capacidade }}</p>
-            </div>
-            </div>
+                {% for event in eventos %}
+                    <a href="{% url 'detalhe_evento' event.id %}" class="event-card">
+                        
+                        <div class="image-wrapper">
+                            {% if event.imagem %}
+                                <img src="{{ event.imagem.url }}" class="event-image" alt="{{ event.titulo }}">
+                            {% else %}
+                                <img src="{% static 'img/evento.png' %}" class="event-image" alt="Imagem padrão">
+                            {% endif %}
+                        </div>
+
+                        <div class="content">
+                            <div class="tags-container">
+                                {% for cat in event.categorias.all %}
+                                    <span class="tag">{{ cat.nome }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <h3>{{ event.titulo }}</h3>
+                            
+                            <div class="info-row">
+                                <p class="date"><i class="fa-regular fa-calendar"></i> {{ event.data_hora_inicio|date:'d/m/Y H:i' }}</p>
+                                <p class="location"><i class="fa-solid fa-location-dot"></i> {{ event.local.nome }}</p>
+                            </div>
+                            </div>
+                    </a>
                 {% empty %}
-                <p>Nenhum evento encontrado.</p>
+                    <p>Nenhum evento encontrado.</p>
                 {% endfor %}
             </div>
         </section>

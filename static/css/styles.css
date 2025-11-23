@@ -167,3 +167,49 @@ body {
     width: 40px; 
     height: auto; 
 }
+
+.event-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    
+    display: flex;      
+    flex-direction: column;
+    text-decoration: none; 
+    color: inherit;        
+    
+    transition: all 0.3s ease; 
+    cursor: pointer;
+}
+
+.event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15); 
+}
+
+.event-card:hover .event-image {
+    transform: scale(1.05); 
+}
+
+.image-wrapper {
+    overflow: hidden; 
+    height: 200px;    
+}
+
+.event-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease; 
+}
+
+.event-card h3 {
+    color: #333;
+    margin: 10px 0;
+}
+
+.event-card p {
+    color: #666;
+    font-size: 0.9rem;
+}

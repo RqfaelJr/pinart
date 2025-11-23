@@ -15,7 +15,7 @@
                 <img src="{% static 'img/default-profile.png' %}" alt="Foto Padrão" class="profile-image">
             {% endif %}
         </div>
-        <h1 class="profile-name">{{ pessoa.nome }}</h1>
+        <h1 class="profile-name">{{ pessoa.user.get_full_name }}</h1>
         <p class="profile-username">@{{ request.user.username }}</p>
 
         <a href="{% url 'editar_perfil' %}" class="btn-edit-profile">

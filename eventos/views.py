@@ -205,7 +205,6 @@ def confirmar_presenca(request, evento_id):
     pass
 
 @login_required
-@participante_required
 def comentar_evento(request, evento_id):
     evento = Evento.objects.get(id=evento_id)
     form = AvaliacaoForm(request.POST)
