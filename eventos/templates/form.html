@@ -12,12 +12,19 @@
         {% csrf_token %}
 
         <div class="form-card">
-            <label class="form-label">Imagem do Evento</label>
-            <div class="image-upload-area">
-                {{ form.imagem }}
-                <p>Clique para adicionar uma imagem<br><span>PNG, JPG ou GIF (max. 10MB)</span></p>
+        <label class="form-label">Imagem do Evento</label>
+        
+        <div class="image-upload-area position-relative">
+            
+            {{ form.imagem }}
+            
+            <div class="upload-content">
+                <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; color: #6f42c1;"></i>
+                <p>Clique ou arraste para adicionar uma imagem<br><span>PNG, JPG ou GIF (max. 10MB)</span></p>
             </div>
+            
         </div>
+    </div>
 
         <div class="form-card">
             <label class="form-label">Título do Evento</label>

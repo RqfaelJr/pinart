@@ -12,14 +12,6 @@ class Local(models.Model):
     def __str__(self):
         return self.nome
 
-class Midia(models.Model):
-    url = models.URLField()
-    descricao = models.CharField(max_length=255, blank=True)
-    local = models.ForeignKey(Local, on_delete=models.CASCADE, related_name='midias')
-
-    def __str__(self):
-        return self.url
-
 class Categoria(models.Model):
     nome = models.CharField(max_length=100, unique=True)
 
@@ -35,6 +27,7 @@ class Evento(models.Model):
     local = models.ForeignKey(Local, on_delete=models.CASCADE, blank=True, null=True)
     categorias = models.ManyToManyField(Categoria, related_name='eventos')
     organizador = models.ForeignKey('pessoas.Pessoa', on_delete=models.CASCADE, related_name='eventos_organizados', blank=True, null=True)
+    imagem = models.ImageField(upload_to='capas_eventos/', blank=True, null=True)
 
     def __str__(self):
         return self.titulo

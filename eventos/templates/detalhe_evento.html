@@ -4,64 +4,64 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/detalhe_evento.css' %}">
+
 <div class="event-detail-page">
     
-    <div class="event-hero" style='background-image: url("{% if evento.imagem %}{{ evento.imagem.url }}{% else %}{% endif %}");'></div>
-        
-        <div class="hero-overlay"></div>
-        
-        <a href="javascript:history.back()" class="btn-back">
-            <i class="fa-solid fa-arrow-left"></i>
-        </a>
-
-        <div class="hero-content">
-            <span class="event-tag">{{ evento.get_categoria_display }}</span>
-            <h1 class="event-title-hero">{{ evento.titulo }}</h1>
-        </div>
-    </div>
-
-    <div class="action-bar-container">
-        <form method="POST" action="{% url 'confirmar_presenca' evento.id %}">
-            {% csrf_token %}
-            <div class="action-bar">
-                {% if esta_confirmado %}
-                    <button type="submit" class="btn-confirm confirmed">
-                        <i class="fa-solid fa-check-circle"></i> Presença Confirmada
-                    </button>
-                {% else %}
-                    <button type="submit" class="btn-confirm">
-                        <i class="fa-solid fa-ticket"></i> Confirmar Presença
-                    </button>
-                {% endif %}
-
-                <button type="button" class="btn-icon"><i class="fa-regular fa-heart"></i></button>
-                <button type="button" class="btn-icon"><i class="fa-solid fa-share-nodes"></i></button>
+    <div class="event-banner-container">
+        {% if evento.imagem %}
+            <img src="{{ evento.imagem.url }}" alt="{{ evento.titulo }}" class="event-banner-img">
+        {% else %}
+            <div class="event-banner-placeholder">
+                <i class="fa-regular fa-image"></i>
             </div>
-        </form>
+        {% endif %}
     </div>
 
-    <div class="content-container">
+    <div class="detalhe-evento-wrapper">
         
+        <div class="event-header">
+            <span class="event-tag">{{ evento.get_categoria_display }}</span>
+            <h1 class="event-main-title">{{ evento.titulo }}</h1>
+        </div>
+
+        <div class="action-bar-wrapper">
+            <form method="POST" action="{% url 'confirmar_presenca' evento.id %}">
+                {% csrf_token %}
+                <div class="action-bar">
+                    {% if esta_confirmado %}
+                        <button type="submit" class="btn-confirm confirmed">
+                            <i class="fa-solid fa-check-circle"></i> Confirmado
+                        </button>
+                    {% else %}
+                        <button type="submit" class="btn-confirm">
+                            <i class="fa-solid fa-ticket"></i> Confirmar Presença
+                        </button>
+                    {% endif %}
+                    <button type="button" class="btn-icon"><i class="fa-regular fa-heart"></i></button>
+                    <button type="button" class="btn-icon"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>
+            </form>
+        </div>
+
         <div class="info-card">
-            <h3 class="card-title">Detalhes do Evento</h3>
+            <h3 class="card-title">Detalhes</h3>
             
             <div class="detail-item">
                 <div class="detail-icon"><i class="fa-regular fa-calendar"></i></div>
                 <div class="detail-text">
                     <h4>Data e Horário</h4>
-                    
                     <div class="date-info-container">
                         <div class="date-entry">
                             <span class="date-badge badge-start">Início</span>
-                            <span>{{ evento.data_hora_inicio|timezone:"America/Sao_Paulo"|date:"l, d \d\e F \d\e Y" }} às {{ evento.data_hora_inicio|timezone:"America/Sao_Paulo"|time:"H:i" }}</span>
+                            <span>{{ evento.data_hora_inicio|timezone:"America/Sao_Paulo"|date:"d/m/Y" }} às {{ evento.data_hora_inicio|timezone:"America/Sao_Paulo"|time:"H:i" }}</span>
                         </div>
-                        
+                        {% if evento.data_hora_fim %}
                         <div class="date-entry">
                             <span class="date-badge badge-end">Fim</span>
-                            <span>{{ evento.data_hora_fim|timezone:"America/Sao_Paulo"|date:"l, d \d\e F \d\e Y" }} às {{ evento.data_hora_fim|timezone:"America/Sao_Paulo"|time:"H:i" }}</span>
+                            <span>{{ evento.data_hora_fim|timezone:"America/Sao_Paulo"|date:"d/m/Y" }} às {{ evento.data_hora_fim|timezone:"America/Sao_Paulo"|time:"H:i" }}</span>
                         </div>
+                        {% endif %}
                     </div>
-
                 </div>
             </div>
 
@@ -84,8 +84,8 @@
         </div>
 
         <div class="info-card">
-            <h3 class="card-title" style="color: #333;">Sobre o Evento</h3>
-            <p style="line-height: 1.6; color: #555;">
+            <h3 class="card-title">Sobre o Evento</h3>
+            <p style="line-height: 1.6; color: #555; margin-bottom: 20px;">
                 {{ evento.descricao|linebreaks }}
             </p>
 
@@ -105,14 +105,13 @@
         </div>
 
         <div class="info-card">
-            <h3 class="card-title" style="color: #333;">
-                <i class="fa-regular fa-comment-dots"></i> Comentários e Avaliações
+            <h3 class="card-title">
+                <i class="fa-regular fa-comment-dots"></i> Comentários
             </h3>
 
             <form method="POST" action="{% url 'comentar_evento' evento.id %}">
                 {% csrf_token %}
                 <div class="comment-input-area">
-                    
                     <div class="rating-box">
                         <input type="radio" name="nota" value="5" id="star5"><label for="star5">★</label>
                         <input type="radio" name="nota" value="4" id="star4"><label for="star4">★</label>
@@ -120,42 +119,43 @@
                         <input type="radio" name="nota" value="2" id="star2"><label for="star2">★</label>
                         <input type="radio" name="nota" value="1" id="star1"><label for="star1">★</label>
                     </div>
-
-                    <textarea name="comentario" class="comment-textarea" placeholder="Compartilhe sua experiência..." required></textarea>
-                    <button type="submit" class="btn-post-comment">Publicar Comentário</button>
+                    <textarea name="comentario" class="comment-textarea" placeholder="Compartilhe sua experiência... (Opcional)"></textarea>
+                    <button type="submit" class="btn-post-comment">Publicar</button>
                 </div>
             </form>
 
-            {% for comentario in avaliacoes %}
-            <div class="comment-item">
-                <div style="display: flex; gap: 15px;">
-                    <div style="width: 40px; height: 40px; background: #eee; border-radius: 50%; overflow: hidden;">
-                        {% if comentario.pessoa.foto %}
-                            <img src="{{ comentario.pessoa.foto.url }}" style="width:100%; height:100%; object-fit: cover;">
-                        {% endif %}
-                    </div>
-                    <div>
-                        <div style="font-weight: 700; color: #4b2aad;">{{ comentario.pessoa.user.get_full_name }}</div>
-                        
-                        <div class="stars-display">
-                            <i class="fa-star {% if comentario.nota >= 1 %}fa-solid{% else %}fa-regular{% endif %}"></i>
-                            <i class="fa-star {% if comentario.nota >= 2 %}fa-solid{% else %}fa-regular{% endif %}"></i>
-                            <i class="fa-star {% if comentario.nota >= 3 %}fa-solid{% else %}fa-regular{% endif %}"></i>
-                            <i class="fa-star {% if comentario.nota >= 4 %}fa-solid{% else %}fa-regular{% endif %}"></i>
-                            <i class="fa-star {% if comentario.nota >= 5 %}fa-solid{% else %}fa-regular{% endif %}"></i>
+            <div class="comments-list">
+                {% for comentario in avaliacoes %}
+                <div class="comment-item" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
+                    <div style="display: flex; gap: 15px;">
+                        <div style="width: 40px; height: 40px; background: #eee; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
+                            {% if comentario.pessoa.foto %}
+                                <img src="{{ comentario.pessoa.foto.url }}" style="width:100%; height:100%; object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'img/default-profile.png' %}" style="width:100%; height:100%; object-fit: cover;">
+                            {% endif %}
                         </div>
-
-                        <p style="margin-top: 5px; color: #555;">{{ comentario.comentario }}</p>
-                        <small style="color: #bbb;">{{ comentario.data_hora|timezone:"America/Sao_Paulo"|date:"d/m/Y" }}</small>
+                        <div>
+                            <div style="font-weight: 700; color: #4b2aad;">
+                                {% if comentario.pessoa %}
+                                    {{ comentario.pessoa.user.get_full_name }}
+                                {% else %}
+                                    Anônimo
+                                {% endif %}
+                            </div>
+                            <div class="stars-display" style="color: #ffc107; font-size: 0.8rem;">
+                                {% if comentario.nota %}Nota: {{ comentario.nota }}/5 ★{% endif %}
+                            </div>
+                            <p style="margin-top: 5px; color: #555;">{{ comentario.comentario }}</p>
+                            <small style="color: #bbb;">{{ comentario.data_hora|timezone:"America/Sao_Paulo"|date:"d/m/Y" }}</small>
+                        </div>
                     </div>
                 </div>
+                {% empty %}
+                    <p style="text-align: center; color: #999; margin-top: 20px;">Nenhum comentário ainda.</p>
+                {% endfor %}
             </div>
-            {% empty %}
-                <p style="text-align: center; color: #999;">Seja o primeiro a comentar!</p>
-            {% endfor %}
         </div>
 
-    </div>
-</div>
-
+    </div> </div>
 {% endblock %}

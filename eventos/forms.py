@@ -1,15 +1,10 @@
 from django import forms
-from .models import Local, Midia, Categoria, Evento, Avaliacao
+from .models import Local, Categoria, Evento, Avaliacao
 
 class LocalForm(forms.ModelForm):
     class Meta:
         model = Local
         fields = ['nome', 'cnpj', 'link', 'endereco']
-
-class MidiaForm(forms.ModelForm):
-    class Meta:
-        model = Midia
-        fields = ['url', 'descricao', 'local']
 
 class CategoriaForm(forms.ModelForm):
     class Meta:
@@ -35,7 +30,7 @@ class EventoForm(forms.ModelForm):
 
     class Meta:
         model = Evento
-        fields = ['titulo', 'descricao', 'data_hora_inicio', 'data_hora_fim', 'capacidade', 'local', 'categorias']
+        fields = ['titulo', 'descricao', 'data_hora_inicio', 'data_hora_fim', 'capacidade', 'local', 'categorias', 'imagem']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
