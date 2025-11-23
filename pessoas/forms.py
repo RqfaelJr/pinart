@@ -36,3 +36,14 @@ class LoginForm(forms.Form):
         label="Senha",
         widget=forms.PasswordInput(attrs={'placeholder': 'Sua senha'})
     )
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name']
+
+class PessoaUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Pessoa
+        fields = ['telefone', 'endereco']

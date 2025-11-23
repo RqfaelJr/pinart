@@ -18,6 +18,10 @@
         <h1 class="profile-name">{{ pessoa.nome }}</h1>
         <p class="profile-username">@{{ request.user.username }}</p>
 
+        <a href="{% url 'editar_perfil' %}" class="btn-edit-profile">
+            <i class="fa-solid fa-pen-to-square"></i> Editar Perfil
+        </a>
+
         <form action="{% url 'logout' %}" method="post" style="margin-top: 15px;">
             {% csrf_token %}
             <button type="submit" class="btn-logout">
