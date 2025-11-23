@@ -17,7 +17,7 @@ class UserForm(forms.ModelForm):
 class PessoaForm(forms.ModelForm):
     class Meta:
         model = Pessoa
-        fields = ['cpf', 'telefone', 'data_nascimento', 'endereco']
+        fields = ['cpf', 'telefone', 'data_nascimento']
         widgets = {
             'data_nascimento': forms.DateInput(attrs={'type': 'date'}),
         }
@@ -46,4 +46,4 @@ class UserUpdateForm(forms.ModelForm):
 class PessoaUpdateForm(forms.ModelForm):
     class Meta:
         model = Pessoa
-        fields = ['telefone', 'endereco']
+        fields = ['foto', 'telefone', 'endereco']
