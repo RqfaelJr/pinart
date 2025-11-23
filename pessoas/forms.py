@@ -4,6 +4,11 @@ from .models import Pessoa
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
+    eh_organizador = forms.BooleanField(
+        required=False, 
+        label="Sou um organizador de eventos",
+        widget=forms.CheckboxInput(attrs={'class': 'checkbox-custom'})
+    )
 
     class Meta:
         model = User

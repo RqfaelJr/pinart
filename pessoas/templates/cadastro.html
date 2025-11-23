@@ -1,0 +1,346 @@
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #a855f7 0%, #f97316 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 0;
+    }
+
+    .brand-logo {
+        width: 50px;
+        height: 50px;
+        background: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 10px auto;
+        color: #a855f7;
+        font-size: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .header-title {
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .header-title h1 { margin: 0; font-size: 24px; }
+    .header-title p { margin: 5px 0 0; opacity: 0.9; font-size: 14px; }
+
+    .register-card {
+        background: white;
+        width: 100%;
+        max-width: 700px; 
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    }
+
+    .section-title {
+        color: #a855f7;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid #f3e8ff;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-row-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.85rem;
+        color: #555;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #e5e7eb;
+        background-color: #f9fafb;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        outline: none;
+        transition: all 0.3s;
+        box-sizing: border-box;
+        height: 45px; 
+    }
+
+    .form-group input:focus, .form-group select:focus {
+        border-color: #a855f7;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(90deg, #a855f7, #f97316);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: transform 0.2s;
+    }
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(168, 85, 247, 0.3);
+    }
+
+    .btn-secondary-link {
+        display: inline-block;
+        color: #a855f7;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-top: 5px;
+    }
+    .btn-secondary-link:hover { text-decoration: underline; }
+
+    .switch-account {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.9rem;
+        color: #666;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .error-msg {
+        color: #ef4444;
+        font-size: 0.8rem;
+        margin-top: 4px;
+        display: block;
+    }
+    .global-errors {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+    padding-top: 20px;
+}
+
+.toggle-label {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+
+input:checked + .slider {
+    background-color: #a855f7;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #a855f7;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+
+    @media (max-width: 600px) {
+        .form-row-grid { grid-template-columns: 1fr; }
+        .register-card { padding: 25px; }
+    }
+</style>
+
+<div class="header-title">
+    <div class="brand-logo">
+        <i class="fa-solid fa-user-tie"></i>
+    </div>
+    <h1>PinArt</h1>
+    <p>Crie sua conta</p>
+</div>
+
+<div class="register-card">
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if user_form.non_field_errors or pessoa_form.non_field_errors %}
+            <div class="global-errors">
+                {% for e in user_form.non_field_errors %}{{ e }}<br>{% endfor %}
+                {% for e in pessoa_form.non_field_errors %}{{ e }}<br>{% endfor %}
+            </div>
+        {% endif %}
+
+        <h3 class="section-title"><i class="fa-solid fa-lock"></i> Dados de Acesso</h3>
+        
+        <div class="form-row-grid">
+            <div class="form-group">
+                <label class="form-label">Usuário</label>
+                {{ user_form.username }}
+                {% if user_form.username.errors %}<span class="error-msg">{{ user_form.username.errors.0 }}</span>{% endif %}
+            </div>
+            <div class="form-group">
+                <label class="form-label">E-mail</label>
+                {{ user_form.email }}
+                {% if user_form.email.errors %}<span class="error-msg">{{ user_form.email.errors.0 }}</span>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-row-grid">
+             <div class="form-row-grid" style="align-items: center;">
+    
+              <div class="form-group">
+                  <label class="form-label">Senha</label>
+                  {{ user_form.password }}
+              </div>
+        </div>
+        <div class="form-group checkbox-wrapper">
+                <label class="toggle-switch">
+                    {{ user_form.eh_organizador }}
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">Quero organizar eventos</span>
+            </div>
+
+            
+            <div class="form-group">
+                </div>
+        </div>
+
+        <h3 class="section-title" style="margin-top: 20px;"><i class="fa-solid fa-address-card"></i> Dados Pessoais</h3>
+
+        <div class="form-row-grid">
+            <div class="form-group">
+                <label class="form-label">Nome</label>
+                {{ user_form.first_name }}
+                {% if user_form.first_name.errors %}<span class="error-msg">{{ user_form.first_name.errors.0 }}</span>{% endif %}
+            </div>
+            <div class="form-group">
+                <label class="form-label">Sobrenome</label>
+                {{ user_form.last_name }}
+                {% if user_form.last_name.errors %}<span class="error-msg">{{ user_form.last_name.errors.0 }}</span>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-row-grid">
+            <div class="form-group">
+                <label class="form-label">CPF</label>
+                {{ pessoa_form.cpf }}
+                {% if pessoa_form.cpf.errors %}<span class="error-msg">{{ pessoa_form.cpf.errors.0 }}</span>{% endif %}
+            </div>
+            <div class="form-group">
+                <label class="form-label">Data de Nascimento</label>
+                {{ pessoa_form.data_nascimento }}
+                {% if pessoa_form.data_nascimento.errors %}<span class="error-msg">{{ pessoa_form.data_nascimento.errors.0 }}</span>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-row-grid">
+            <div class="form-group">
+                <label class="form-label">Telefone</label>
+                {{ pessoa_form.telefone }}
+                {% if pessoa_form.telefone.errors %}<span class="error-msg">{{ pessoa_form.telefone.errors.0 }}</span>{% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Endereço Cadastrado</label>
+                <div style="display: flex; gap: 10px;">
+                    {{ pessoa_form.endereco }}
+                    <a href="{% url 'cadastro_endereco' %}?next={{ request.get_full_path|urlencode }}" 
+                       title="Cadastrar novo endereço" 
+                       style="display: flex; align-items: center; justify-content: center; width: 45px; background: #f3e8ff; color: #a855f7; border-radius: 10px; text-decoration: none;">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+                {% if pessoa_form.endereco.errors %}<span class="error-msg">{{ pessoa_form.endereco.errors.0 }}</span>{% endif %}
+                
+                <small style="color: #999; font-size: 0.8rem;">Selecione ou crie um novo (+)</small>
+            </div>
+        </div>
+
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+        <button class="btn-submit" type="submit">Criar Conta</button>
+
+        <div class="switch-account">
+            <br><br>
+            Já tem uma conta? <a class="btn-secondary-link" href="{% url 'login' %}">Fazer Login</a>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

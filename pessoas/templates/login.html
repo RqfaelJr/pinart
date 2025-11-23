@@ -1,41 +1,258 @@
-{% extends "base_cadastro.html" %}
-{% block title %}Login — PinArt{% endblock %}
-{% block header %}Acesse sua conta{% endblock %}
+{% load static %}
+
+
 
 {% block content %}
-  <p class="small">Entre com seu usuário e senha para continuar.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <form method="post" novalidate>
-    {% csrf_token %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #a855f7 0%, #f97316 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 
-    {% if form.non_field_errors %}
-      <div class="errors">
-        {% for e in form.non_field_errors %}
-          {{ e }}<br>
-        {% endfor %}
-      </div>
-    {% endif %}
+    .login-header {
+        text-align: center;
+        color: white;
+        margin-bottom: 20px;
+    }
+    
+    .brand-logo {
+        width: 60px;
+        height: 60px;
+        background: white;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 10px auto;
+        color: #a855f7;
+        font-size: 24px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
 
-    <div class="form-row">
-      <label for="id_username">Usuário</label>
-      {{ form.username }}
-      {% if form.username.errors %}
-        <div class="field-error">{{ form.username.errors|striptags }}</div>
-      {% endif %}
+    .brand-name {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .brand-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-top: 5px;
+    }
+
+    .login-card {
+        background: white;
+        width: 100%;
+        max-width: 400px;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        text-align: center;
+    }
+
+    .welcome-text {
+        color: #333;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .sub-text {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.85rem;
+        color: #555;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+    }
+
+    .input-wrapper input {
+        width: 100%;
+        padding: 12px 15px 12px 40px;
+        border: 1px solid #e5e7eb;
+        background-color: #f9fafb;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        outline: none;
+        transition: all 0.3s;
+        box-sizing: border-box; 
+    }
+
+    .input-wrapper input:focus {
+        border-color: #a855f7;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+    }
+
+    .forgot-password {
+        display: block;
+        text-align: right;
+        font-size: 0.85rem;
+        color: #a855f7;
+        text-decoration: none;
+        margin-top: 5px;
+        font-weight: 600;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(90deg, #a855f7, #f97316);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: transform 0.2s;
+    }
+
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(168, 85, 247, 0.3);
+    }
+
+    .create-account {
+        margin-top: 25px;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .create-account a {
+        color: #a855f7;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .page-footer {
+        margin-top: 30px;
+        color: rgba(255,255,255,0.7);
+        font-size: 0.8rem;
+    }
+
+    .page-footer a {
+        color: white;
+        text-decoration: underline;
+    }
+
+    .error-msg {
+        color: #ef4444;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: block;
+    }
+    .non-field-errors {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+</style>
+
+<div class="login-header">
+    <div class="brand-logo">
+        <i class="fa-solid fa-location-dot"></i>
     </div>
+    <h1 class="brand-name">PinArt</h1>
+    <p class="brand-subtitle">Descubra eventos incríveis perto de você</p>
+</div>
 
-    <div class="form-row">
-      <label for="id_password">Senha</label>
-      {{ form.password }}
-      {% if form.password.errors %}
-        <div class="field-error">{{ form.password.errors|striptags }}</div>
-      {% endif %}
-    </div>
+<div class="login-card">
+    <h2 class="welcome-text">Bem-vindo de volta!</h2>
+    <p class="sub-text">Entre para continuar</p>
 
-    <p style="margin-top:14px">
-      <button class="btn" type="submit">Entrar</button>
-      <a class="btn secondary" href="{% url 'cadastro_organizador' %}">Criar conta de organizador</a>
-      <a class="btn secondary" href="{% url 'cadastro_participante' %}">Criar conta de participante</a>
-    </p>
-  </form>
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="non-field-errors">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}" class="form-label">Usuário</label>
+            <div class="input-wrapper">
+                <i class="fa-regular fa-envelope input-icon"></i>
+                {{ form.username }}
+            </div>
+            {% if form.username.errors %}
+                <span class="error-msg">{{ form.username.errors.0 }}</span>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.password.id_for_label }}" class="form-label">Senha</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-lock input-icon"></i>
+                {{ form.password }}
+            </div>
+            {% if form.password.errors %}
+                <span class="error-msg">{{ form.password.errors.0 }}</span>
+            {% endif %}
+            
+            <a href="#" class="forgot-password">Esqueceu a senha?</a>
+        </div>
+
+        <button type="submit" class="btn-login">Entrar</button>
+    </form>
+
+    <div class="create-account">
+        Não tem uma conta? <br>
+        <a href="{% url 'cadastro' %}">Criar conta</a>
+        </div>
+</div>
+
+<div class="page-footer">
+    Ao continuar, você concorda com nossos <a href="#">Termos de Uso</a>
+</div>
+
 {% endblock %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const userInput = document.getElementById("{{ form.username.id_for_label }}");
+        const passInput = document.getElementById("{{ form.password.id_for_label }}");
+
+        if(userInput) userInput.placeholder = "username";
+        if(passInput) passInput.placeholder = "••••••••";
+    });
+</script>

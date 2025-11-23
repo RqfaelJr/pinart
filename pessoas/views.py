@@ -2,66 +2,37 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
 from .forms import UserForm, PessoaForm, EnderecoForm
 
-def cadastrar_organizador(request):
+def cadastro(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         pessoa_form = PessoaForm(request.POST)
-        print(1)
+
         if user_form.is_valid() and pessoa_form.is_valid():
-            print(2)
             user = user_form.save(commit=False)
-            user.set_password(user.password)
+            user.set_password(user_form.cleaned_data['password'])
             user.save()
+
+            is_org = user_form.cleaned_data.get('eh_organizador')
+            
+            if is_org:
+                grupo = Group.objects.get(name='Organizador')
+            else:
+                grupo = Group.objects.get(name='Participante')
+            
+            user.groups.add(grupo)
 
             pessoa = pessoa_form.save(commit=False)
             pessoa.user = user
             pessoa.save()
 
-            grupo = Group.objects.get(name='Organizador')
-            user.groups.add(grupo)
-
             return redirect('login')
-        else:
-            print(user_form.errors)
-            print(pessoa_form.errors)
-    else: 
-        print(3)
-        user_form = UserForm(request.GET or None)
-        pessoa_form = PessoaForm(request.GET or None)
 
-
-    return render(request, 'cadastro_organizador.html', {
-        'user_form': user_form,
-        'pessoa_form': pessoa_form
-    })
-
-
-def cadastrar_participante(request):
-    if request.method == 'POST':
-        user_form = UserForm(request.POST)
-        pessoa_form = PessoaForm(request.POST)
-        if user_form.is_valid() and pessoa_form.is_valid():
-            user = user_form.save(commit=False)
-            user.set_password(user.password)
-            user.save()
-
-            pessoa = pessoa_form.save(commit=False)
-            pessoa.user = user
-            pessoa.save()
-
-            grupo = Group.objects.get(name='Participante')
-            user.groups.add(grupo)
-
-            return redirect('login')
     else:
-        user_form = UserForm(request.GET or None)
-        pessoa_form = PessoaForm(request.GET or None)
+        user_form = UserForm()
+        pessoa_form = PessoaForm()
 
-
-    return render(request, 'cadastro_participante.html', {
-        'user_form': user_form,
-        'pessoa_form': pessoa_form
-    })
+    return render(request, 'cadastro.html', {'user_form': user_form, 'pessoa_form': pessoa_form})
+    
 
 def cadastrar_endereco(request):
     next_url = request.GET.get('next', request.POST.get('next', 'home'))

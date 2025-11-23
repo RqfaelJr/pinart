@@ -127,10 +127,10 @@ def create_evento(request):
             evento.organizador = request.user.pessoa
             evento.save()
             form.save_m2m()
-            return redirect('home')
+            return redirect('detalhe_evento', evento_id=evento.id)
     else:
         form = EventoForm()
-    return redirect('detalhe_evento', evento_id=evento.id)
+    return render(request, 'form.html', {'form': form, 'title': 'Criar Evento'})
 
 @login_required
 def lista_notificacoes(request):
@@ -191,7 +191,7 @@ def mapa(request):
             'categoria': str(evento.categorias.first()) if evento.categorias.exists() else 'Outros',
             'local_nome': evento.local.nome,
             'data': evento.data_hora_inicio.strftime('%d/%m/%Y às %H:%M'),
-            'url': f"/evento/{evento.id}/" # Certifique-se que essa URL existe
+            'url': f"/evento/{evento.id}/"
         })
 
     
