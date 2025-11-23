@@ -54,76 +54,65 @@ body {
     border: 1px solid #ccc;
 }
 
-/* Container da seção */
+
 .categories {
-    /* Define uma largura máxima igual a do seu feed (geralmente 1000px ou 1200px) */
     max-width: 1200px; 
-    
-    /* O 'auto' nas laterais é o que centraliza o bloco na tela */
     margin: 20px auto 30px auto; 
-    
-    /* Mantém um respiro interno para não colar texto na borda em telas de celular */
     padding: 0 10px; 
 }
 
-/* Título "Categorias" */
 .categories h2 {
     font-size: 1.2rem;
-    color: #4a148c;        /* Roxo escuro */
+    color: #4a148c;        
     margin-bottom: 15px;
     display: flex;
     align-items: center;
-    gap: 8px;              /* Espaço entre o ícone e o texto */
+    gap: 8px;  
     font-weight: 600;
 }
 
-/* Lista de botões (Flexbox para alinhar um ao lado do outro) */
 .category-list {
     display: flex;
-    gap: 10px;             /* Espaço entre os botões */
-    overflow-x: auto;      /* Permite rolar para o lado no celular */
-    padding-bottom: 5px;   /* Espaço para a barra de rolagem não colar */
-    
-    /* Esconde a barra de rolagem feia (Opcional) */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
+    gap: 10px;           
+    overflow-x: auto;    
+    padding-bottom: 5px; 
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
 }
 .category-list::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    display: none;
 }
 
-/* Estilo Padrão do Botão (Inativo) */
 .category-list a {
     display: inline-block;
     text-decoration: none;
     
-    padding: 8px 24px;     /* Altura e Largura interna */
-    border-radius: 50px;   /* Deixa o formato de pílula arredondada */
+    padding: 8px 24px;     
+    border-radius: 50px;   
     
     background-color: #fff;
-    border: 1px solid #e0e0e0; /* Borda cinza bem clara */
-    color: #333;           /* Cor do texto cinza escuro */
+    border: 1px solid #e0e0e0; 
+    color: #333;
     
     font-size: 0.9rem;
     font-weight: 500;
-    white-space: nowrap;   /* Impede que o texto quebre de linha */
-    transition: all 0.3s ease; /* Animação suave */
+    white-space: nowrap;  
+    transition: all 0.3s ease; 
 }
 
-/* Efeito ao passar o mouse (Hover) nos inativos */
 .category-list a:hover:not(.active) {
-    border-color: #8b5cf6; /* Borda fica roxa */
-    color: #8b5cf6;        /* Texto fica roxo */
-    background-color: #f5f3ff; /* Fundo roxo bem clarinho */
+    border-color: #8b5cf6; 
+    color: #8b5cf6;        
+    background-color: #f5f3ff;
 }
 
-/* Estilo do Botão ATIVO (Gradiente igual da foto) */
+
 .category-list a.active {
-    /* Gradiente do Roxo/Rosa para o Laranja */
+   
     background: linear-gradient(90deg, #a855f7, #f97316); 
-    color: white;          /* Texto branco */
-    border: 1px solid transparent; /* Remove a borda cinza */
-    box-shadow: 0 4px 10px rgba(168, 85, 247, 0.3); /* Sombra suave brilhante */
+    color: white;       
+    border: 1px solid transparent; 
+    box-shadow: 0 4px 10px rgba(168, 85, 247, 0.3); 
 }
 
 .popular-events {
@@ -175,10 +164,6 @@ body {
 }
 
 .logo-img {
-    /* Define uma largura fixa. Ajuste o valor conforme necessário */
-    width: 40px;
-    
-    /* 'height: auto' é crucial! Ele garante que a imagem não fique 
-       esticada ou achatada, mantendo a proporção original */
+    width: 40px; 
     height: auto; 
 }

@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erro Interno - PinArt</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            /* Fundo roxo padrão PinArt */
+            background-color: #f3e8ff;
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .error-card {
+            background: white;
+            padding: 50px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(111, 66, 193, 0.15);
+            max-width: 480px;
+            width: 90%;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .error-icon {
+            font-size: 80px;
+            /* Gradiente Vermelho/Laranja para indicar ERRO TÉCNICO */
+            background: linear-gradient(45deg, #ef4444, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        h1 {
+            color: #4a148c;
+            margin-bottom: 15px;
+            font-size: 3rem; 
+            font-weight: 800;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #777;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            font-size: 0.95rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 35px;
+            background-color: #6f42c1;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+        }
+
+        .btn-back:hover {
+            background-color: #5a32a3;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="error-card">
+        <i class="fa-solid fa-triangle-exclamation error-icon"></i>
+        
+        <h1>500</h1>
+        <h2>Erro Interno do Servidor</h2>
+        
+        <p>
+            Ops! Algo deu errado do nosso lado. Nossos desenvolvedores já foram notificados. Tente atualizar a página.
+        </p>
+        
+        <a href="{% url 'home' %}" class="btn-back">
+            <i class="fa-solid fa-rotate-right"></i> Voltar ao Início </a>
+    </div>
+
+</body>
+</html>

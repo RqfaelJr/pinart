@@ -252,3 +252,16 @@ def comentar_evento(request, evento_id):
         messages.error(request, 'Erro ao enviar comentário. Verifique os campos.')
 
     return redirect('detalhe_evento', evento_id=evento_id)
+
+def erro_permissao(request, exception=None):
+    return render(request, '403.html', status=403)
+
+def pagina_nao_encontrada(request, exception):
+    return render(request, '404.html', status=404)
+
+def erro_servidor(request):
+    return render(request, '500.html', status=500)
+
+def teste_quebra(request):
+    resultado = 1 / 0  # Isso gera ZeroDivisionError (Erro 500)
+    return 

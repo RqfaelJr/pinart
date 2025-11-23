@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Negado - PinArt</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Reset básico */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            /* A COR ROXINHA DE FUNDO */
+            background-color: #f3e8ff; /* Roxo bem clarinho base */
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); /* Gradiente suave */
+            
+            height: 100vh; /* Ocupa a tela inteira */
+            display: flex;
+            align-items: center; /* Centraliza verticalmente */
+            justify-content: center; /* Centraliza horizontalmente */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* O Cartão central branco */
+        .error-card {
+            background: white;
+            padding: 50px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(111, 66, 193, 0.15); /* Sombra roxa suave */
+            max-width: 480px;
+            width: 90%;
+            animation: fadeIn 0.5s ease-out; /* Efeito de entrada suave */
+        }
+
+        /* O Cadeado */
+        .error-icon {
+            font-size: 80px;
+            /* O gradiente laranja/amarelo no ícone */
+            background: linear-gradient(45deg, #fc4a1a, #f7b733);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        h1 {
+            color: #4a148c; /* Roxo escuro */
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            font-size: 1rem;
+        }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 35px;
+            background-color: #6f42c1; /* Roxo PinArt */
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+        }
+
+        .btn-back:hover {
+            background-color: #5a32a3;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
+        }
+
+        /* Animaçãozinha de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="error-card">
+        <i class="fa-solid fa-lock error-icon"></i>
+        
+        <h1>Acesso Restrito</h1>
+        
+        <p>
+            Ops! Você não tem permissão para acessar esta página. 
+            Verifique se você está na conta correta ou se possui privilégios de organizador.
+        </p>
+        
+        <a href="{% url 'home' %}" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Voltar para o Início
+        </a>
+    </div>
+
+</body>
+</html>
