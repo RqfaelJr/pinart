@@ -4,7 +4,7 @@ import requests
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .models import Avaliacao, Categoria, Evento
-from pessoas.models import Notificacao
+from pessoas.models import Inscricao, Notificacao
 from pessoas.forms import EnderecoForm
 from .forms import LocalForm, CategoriaForm, EventoForm, AvaliacaoForm
 from pessoas.decorators import organizador_required, participante_required
@@ -150,10 +150,20 @@ def marcar_todas_lidas(request):
 @login_required
 def detalhe_evento(request, evento_id):
     evento = Evento.objects.get(id=evento_id)
+ 
     lista_avaliacoes = evento.avaliacoes.all().order_by('-data_hora')
+    esta_confirmado = False
+    if request.user.is_authenticated and hasattr(request.user, 'pessoa'):
+        esta_confirmado = evento.inscricoes.filter(pessoa=request.user.pessoa).exists()
+
+   
+    total_participantes = evento.inscricoes.count()
+
     return render(request, 'detalhe_evento.html', {
         'evento': evento,
-        'avaliacoes': lista_avaliacoes
+        'avaliacoes': lista_avaliacoes,
+        'esta_confirmado': esta_confirmado, 
+        'total_participantes': total_participantes 
     })
 @login_required
 def perfil(request):
@@ -200,8 +210,27 @@ def mapa(request):
         'eventos_json': eventos_list
     })
 
+@login_required
 def confirmar_presenca(request, evento_id):
-    pass
+    evento = Evento.objects.get(id=evento_id)
+    
+    # Verifica se o usuário tem perfil de Pessoa
+    if not hasattr(request.user, 'pessoa'):
+        return redirect('detalhe_evento', evento_id=evento.id)
+
+    pessoa = request.user.pessoa
+
+    # Tenta buscar uma inscrição existente
+    inscricao = Inscricao.objects.filter(pessoa=pessoa, evento=evento).first()
+
+    if inscricao:
+        # Se já existe, o usuário clicou para CANCELAR
+        inscricao.delete()
+    else:
+        # Se não existe, CRIA uma nova inscrição
+        Inscricao.objects.create(pessoa=pessoa, evento=evento)
+    
+    return redirect('detalhe_evento', evento_id=evento.id)
 
 @login_required
 def comentar_evento(request, evento_id):
