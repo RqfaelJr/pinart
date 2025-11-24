@@ -1,4 +1,4 @@
-.map-page-container {
+    .map-page-container {
         position: relative;
         height: calc(100vh - 80px); 
         display: flex;
@@ -165,24 +165,6 @@
         display: inline-block;
     }
 
-    .custom-pin {
-        background-color: white;
-        border-radius: 50%;
-        border: 2px solid white;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        color: white;
-    }
-    
-    .pin-musica { background-color: #ef4444; }
-    .pin-cultura { background-color: #10b981; }
-    .pin-educacao { background-color: #3b82f6; }
-    .pin-gastronomia { background-color: #db2777; }
-    .pin-outros { background-color: #f59e0b; }
-
     #list-view {
         display: none;
         padding: 40px;
@@ -227,4 +209,47 @@
     .btn-locate-me:hover {
         background-color: #f3e8ff;
         transform: scale(1.05);
+    }
+
+    .custom-div-icon {
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .custom-pin {
+        width: 36px;
+        height: 36px;
+        border-radius: 50% 50% 50% 0;
+        background-color: #6f42c1; 
+        border: 3px solid #fff;    
+        transform: rotate(-45deg);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        top: -18px;
+        left: -3px;
+    }
+
+    .custom-pin i {
+        transform: rotate(45deg);
+        color: white;
+        font-size: 16px;
+        margin-top: 2px;
+    }
+
+    .pin-musica { background-color: #e11d48; }
+    .pin-cultura { background-color: #d97706; }
+    .pin-educacao { background-color: #2563eb; }
+    .pin-gastronomia { background-color: #16a34a; }
+    .pin-outros { background-color: #9333ea; } 
+
+    .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+        background-color: rgba(111, 66, 193, 0.6);
+    }
+    .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+        background-color: #6f42c1;
+        color: white;
+        font-weight: bold;
     }

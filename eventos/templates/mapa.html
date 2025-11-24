@@ -3,6 +3,8 @@
 
 {% block content %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="{% static 'css/mapa.css' %}">
 
@@ -10,7 +12,6 @@
     
     <div class="map-controls-bar">
         <h1 class="page-title">Mapa de Eventos</h1>
-        
         <div class="view-toggle">
             <button class="toggle-btn active" onclick="switchView('map')" id="btn-map">
                 <i class="fa-solid fa-map"></i> Mapa
@@ -67,6 +68,8 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
 {{ eventos_json|json_script:"eventos-data" }}
 
 <script>
@@ -76,8 +79,77 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    var userMarker = null;
+    var markers = L.markerClusterGroup({
+        showCoverageOnHover: false, 
+        spiderfyOnMaxZoom: true,
+        iconCreateFunction: function(cluster) {
+            var childCount = cluster.getChildCount();
+            var c = ' marker-cluster-';
+            if (childCount < 10) { c += 'small'; }
+            else if (childCount < 100) { c += 'medium'; }
+            else { c += 'large'; }
 
+            return new L.DivIcon({ 
+                html: '<div><span>' + childCount + '</span></div>', 
+                className: 'marker-cluster' + c, 
+                iconSize: new L.Point(40, 40) 
+            });
+        }
+    });
+
+    function createCustomIcon(categoria) {
+        let colorClass = 'pin-outros';
+        let iconClass = 'fa-star'; 
+
+        if (categoria) {
+            const cat = categoria.toLowerCase();
+            if (cat.includes('música') || cat.includes('show')) {
+                colorClass = 'pin-musica'; iconClass = 'fa-music';
+            } else if (cat.includes('cultura') || cat.includes('arte')) {
+                colorClass = 'pin-cultura'; iconClass = 'fa-palette';
+            } else if (cat.includes('educação') || cat.includes('workshop')) {
+                colorClass = 'pin-educacao'; iconClass = 'fa-graduation-cap';
+            } else if (cat.includes('gastronomia') || cat.includes('comida')) {
+                colorClass = 'pin-gastronomia'; iconClass = 'fa-utensils';
+            }
+        }
+
+        return L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div class='custom-pin ${colorClass}'><i class='fa-solid ${iconClass}'></i></div>`,
+            iconSize: [36, 36],
+            iconAnchor: [18, 36],
+            popupAnchor: [0, -40]
+        });
+    }
+
+    const eventosData = JSON.parse(document.getElementById('eventos-data').textContent);
+
+    eventosData.forEach(evento => {
+        if (evento.lat && evento.lng) {
+            const marker = L.marker([evento.lat, evento.lng], {
+                icon: createCustomIcon(evento.categoria)
+            });
+
+            const popupContent = `
+                <div style="text-align: center; width: 200px;">
+                    <h3 style="margin: 0 0 5px 0; color: #4b2aad; font-size: 16px;">${evento.titulo}</h3>
+                    <p style="margin: 5px 0; font-size: 13px; color: #666;">${evento.local_nome}</p>
+                    <p style="font-weight: bold; margin: 5px 0; font-size: 12px;">${evento.data}</p>
+                    <a href="${evento.url}" style="display: inline-block; margin-top: 8px; color: #8b5cf6; text-decoration: none; font-weight: bold; font-size: 13px;">
+                        Ver Detalhes &rarr;
+                    </a>
+                </div>
+            `;
+            marker.bindPopup(popupContent);
+
+            markers.addLayer(marker);
+        }
+    });
+
+    map.addLayer(markers);
+
+    var userMarker = null;
     function localizarUsuario() {
         map.locate({setView: true, maxZoom: 16});
     }
@@ -97,7 +169,7 @@
             opacity: 1,
             fillOpacity: 0.8
         }).addTo(map)
-        .bindPopup("Você está aqui! (Precisão: " + Math.round(radius) + "m)").openPopup();
+        .bindPopup("Você está aqui!").openPopup();
 
         L.circle(e.latlng, radius).addTo(map);
     }
@@ -110,53 +182,6 @@
     map.on('locationerror', onLocationError);
 
     localizarUsuario();
-
-
-    function createCustomIcon(categoria) {
-        let colorClass = 'pin-outros';
-        let iconClass = 'fa-star'; 
-
-        const cat = categoria.toLowerCase();
-        if (cat.includes('música') || cat.includes('show')) {
-            colorClass = 'pin-musica'; iconClass = 'fa-music';
-        } else if (cat.includes('cultura') || cat.includes('arte')) {
-            colorClass = 'pin-cultura'; iconClass = 'fa-palette';
-        } else if (cat.includes('educação') || cat.includes('workshop')) {
-            colorClass = 'pin-educacao'; iconClass = 'fa-graduation-cap';
-        } else if (cat.includes('gastronomia') || cat.includes('comida')) {
-            colorClass = 'pin-gastronomia'; iconClass = 'fa-utensils';
-        }
-
-        return L.divIcon({
-            className: 'custom-div-icon',
-            html: `<div class='custom-pin ${colorClass}' style='width: 36px; height: 36px;'><i class='fa-solid ${iconClass}'></i></div>`,
-            iconSize: [36, 36],
-            iconAnchor: [18, 36],
-            popupAnchor: [0, -40]
-        });
-    }
-
-    const eventosData = JSON.parse(document.getElementById('eventos-data').textContent);
-
-    eventosData.forEach(evento => {
-        if (evento.lat && evento.lng) {
-            const marker = L.marker([evento.lat, evento.lng], {
-                icon: createCustomIcon(evento.categoria)
-            }).addTo(map);
-
-            const popupContent = `
-                <div style="text-align: center; width: 200px;">
-                    <h3 style="margin: 0 0 5px 0; color: #4b2aad; font-size: 16px;">${evento.titulo}</h3>
-                    <p style="margin: 5px 0; font-size: 13px; color: #666;">${evento.local_nome}</p>
-                    <p style="font-weight: bold; margin: 5px 0; font-size: 12px;">${evento.data}</p>
-                    <a href="${evento.url}" style="display: inline-block; margin-top: 8px; color: #8b5cf6; text-decoration: none; font-weight: bold; font-size: 13px;">
-                        Ver Detalhes &rarr;
-                    </a>
-                </div>
-            `;
-            marker.bindPopup(popupContent);
-        }
-    });
 
     function switchView(view) {
         const mapDiv = document.getElementById('map');
