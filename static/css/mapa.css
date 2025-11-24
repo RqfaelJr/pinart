@@ -109,21 +109,6 @@
         background: #7c3aed;
     }
 
-    .btn-filter {
-        background: #fff;
-        border: none;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        min-width: 50px; 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        color: #666;
-    }
-
     #map {
         flex: 1;
         margin: 20px 30px 30px 30px;
@@ -259,3 +244,103 @@
         color: white;
         font-weight: bold;
     }
+
+    @media (max-width: 768px) {
+    
+    .search-input {
+        font-size: 14px; 
+        padding: 10px 10px 10px 35px;
+    }
+
+    .map-legend {
+        left: 10px;      
+        bottom: 20px;    
+        padding: 10px;   
+        min-width: auto; 
+        max-width: 160px;
+    }
+
+    .legend-title {
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+
+    .legend-item {
+        font-size: 11px;
+        margin-bottom: 3px;
+    }
+
+    .dot {
+        width: 8px; 
+        height: 8px;
+    }
+
+    .btn-locate-me {
+        right: 10px;     
+        bottom: 20px;    
+        width: 40px;     
+        height: 40px;
+        font-size: 16px; 
+    }
+    
+
+    .search-bar-container {
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        
+        width: 100%;
+
+        box-sizing: border-box; 
+        padding: 10px 15px;
+        
+        background-color: #fff;
+        z-index: 5;
+        
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .search-input-wrapper {
+        flex: 1; 
+        min-width: 0; 
+        
+        box-shadow: none;
+        border: 1px solid #e0e0e0;
+        background-color: #f9f9f9;
+        height: 45px;
+    }
+
+    .btn-search {
+        flex-shrink: 0; 
+        
+        height: 45px;
+        padding: 0 20px;
+        border-radius: 50px;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    #map {
+        margin: 0;
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        border-top: 1px solid #ddd;
+        flex: 1; 
+        height: auto; 
+    }
+
+    .map-controls-bar {
+        padding: 10px 20px;
+        gap: 10px;
+    }
+    
+    .page-title {
+        font-size: 18px;
+    }
+
+    
+}
