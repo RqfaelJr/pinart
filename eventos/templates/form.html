@@ -91,5 +91,39 @@
 
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const uploadArea = document.querySelector('.image-upload-area');
+        const fileInput = uploadArea.querySelector('input[type="file"]');
+        const contentDiv = uploadArea.querySelector('.upload-content');
+
+        const originalContent = contentDiv.innerHTML;
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const imageSrc = URL.createObjectURL(file);
+
+                contentDiv.innerHTML = `
+                    <img src="${imageSrc}" class="preview-img">
+                    <div class="success-message">
+                        <i class="fa-solid fa-check-circle"></i> Imagem selecionada!
+                    </div>
+                    <span class="file-name">${file.name}</span>
+                `;
+
+                uploadArea.style.borderColor = "#6f42c1";
+                uploadArea.style.backgroundColor = "#f3e8ff";
+            } else {
+                contentDiv.innerHTML = originalContent;
+                uploadArea.style.borderColor = "#ccc";
+                uploadArea.style.backgroundColor = "#f9f9f9";
+            }
+        });
+    });
+</script>
 {% include 'includes/modal_local.html' %}
 {% endblock %}
+
+

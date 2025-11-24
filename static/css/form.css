@@ -199,3 +199,29 @@ textarea {
     background-color: #6C63FF;
     color: white;
 }
+
+.preview-img {
+    max-height: 150px;
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+    object-fit: contain;
+}
+
+.success-message {
+    color: #6f42c1; 
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.file-name {
+    font-size: 0.85rem;
+    color: #666;
+    word-break: break-all;
+}
