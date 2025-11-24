@@ -25,10 +25,9 @@
     <div class="search-bar-container" id="search-container">
         <div class="search-input-wrapper">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" class="search-input" placeholder="Buscar por localização, evento...">
+            <input type="text" class="search-input" placeholder="Buscar por localização, evento, local ou categoria...">
         </div>
         <button class="btn-search">Buscar</button>
-        <button class="btn-filter"><i class="fa-solid fa-filter"></i></button>
     </div>
 
     <div id="map"></div>
@@ -39,9 +38,9 @@
 
     <div class="map-legend" id="legend-container">
         <span class="legend-title">Legenda</span>
-        <div class="legend-item"><span class="dot pin-musica"></span> Música</div>
-        <div class="legend-item"><span class="dot pin-cultura"></span> Cultura</div>
-        <div class="legend-item"><span class="dot pin-educacao"></span> Educação</div>
+        <div class="legend-item"><span class="dot pin-festa"></span> Festa</div>
+        <div class="legend-item"><span class="dot pin-teatro"></span> Teatro</div>
+        <div class="legend-item"><span class="dot pin-comedia"></span> Comédia</div>
         <div class="legend-item"><span class="dot pin-gastronomia"></span> Gastronomia</div>
         <div class="legend-item"><span class="dot pin-outros"></span> Outros</div>
     </div>
@@ -105,10 +104,27 @@
 
         if (categoria) {
             const cat = categoria.toLowerCase();
-            if (cat.includes('música') || cat.includes('show')) { colorClass = 'pin-musica'; iconClass = 'fa-music'; }
-            else if (cat.includes('cultura') || cat.includes('arte')) { colorClass = 'pin-cultura'; iconClass = 'fa-palette'; }
-            else if (cat.includes('educação') || cat.includes('workshop')) { colorClass = 'pin-educacao'; iconClass = 'fa-graduation-cap'; }
-            else if (cat.includes('gastronomia') || cat.includes('comida')) { colorClass = 'pin-gastronomia'; iconClass = 'fa-utensils'; }
+
+            if (cat.includes('festa') || cat.includes('show') || cat.includes('balada')) { 
+                colorClass = 'pin-festa'; 
+                iconClass = 'fa-champagne-glasses'; 
+            } 
+            else if (cat.includes('teatro') || cat.includes('arte') || cat.includes('cultura')) { 
+                colorClass = 'pin-teatro'; 
+                iconClass = 'fa-masks-theater'; 
+            } 
+            else if (cat.includes('comédia') || cat.includes('stand-up')) { 
+                colorClass = 'pin-comedia'; 
+                iconClass = 'fa-face-laugh-squint'; 
+            }
+            else if (cat.includes('workshop') || cat.includes('curso') || cat.includes('palestra')) { 
+                colorClass = 'pin-educacao'; 
+                iconClass = 'fa-book-open'; 
+            }
+            else if (cat.includes('gastronomia') || cat.includes('jantar')) {
+                colorClass = 'pin-gastronomia';
+                iconClass = 'fa-utensils';
+            }
         }
 
         return L.divIcon({
