@@ -12,6 +12,8 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.db import transaction
 from django.http import JsonResponse
+from django.utils import timezone
+
 
 def _get_next_url(request, default_name='home'):
     return request.POST.get('next') or request.GET.get('next') or reverse(default_name)
@@ -167,10 +169,33 @@ def detalhe_evento(request, evento_id):
     })
 @login_required
 def perfil(request):
+    if not hasattr(request.user, 'pessoa'):
+        return redirect('cadastro_participante') # Ou para onde você cria o perfil
+    
     pessoa = request.user.pessoa
-    return render(request, 'perfil.html', {
-        'pessoa': pessoa
-    })
+
+    total_marcados = pessoa.inscricoes.count()
+
+    total_presencas = pessoa.inscricoes.filter(participou=True).count()
+
+    stats = {
+        'eventos_marcados': total_marcados,
+        'presencas_confirmadas': total_presencas
+    }
+
+    inscricoes_futuras = pessoa.inscricoes.filter(
+        evento__data_hora_inicio__gte=timezone.now()
+    ).select_related('evento', 'evento__local')
+
+    proximos_eventos = [inscricao.evento for inscricao in inscricoes_futuras]
+
+    context = {
+        'pessoa': pessoa,
+        'stats': stats,
+        'proximos_eventos': proximos_eventos,
+    }
+    
+    return render(request, 'perfil.html', context)
 
 
 @login_required
@@ -213,21 +238,17 @@ def mapa(request):
 @login_required
 def confirmar_presenca(request, evento_id):
     evento = Evento.objects.get(id=evento_id)
-    
-    # Verifica se o usuário tem perfil de Pessoa
+
     if not hasattr(request.user, 'pessoa'):
         return redirect('detalhe_evento', evento_id=evento.id)
 
     pessoa = request.user.pessoa
 
-    # Tenta buscar uma inscrição existente
     inscricao = Inscricao.objects.filter(pessoa=pessoa, evento=evento).first()
 
     if inscricao:
-        # Se já existe, o usuário clicou para CANCELAR
         inscricao.delete()
     else:
-        # Se não existe, CRIA uma nova inscrição
         Inscricao.objects.create(pessoa=pessoa, evento=evento)
     
     return redirect('detalhe_evento', evento_id=evento.id)

@@ -110,26 +110,18 @@
     }
 
     .event-card {
-        display: flex;
-        background: #fff;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        border: 1px solid #f0f0f0;
-        transition: transform 0.2s, box-shadow 0.2s;
-        text-decoration: none;
-        color: inherit;
+    flex-direction: column;
+    }
+
+    .event-image {
+        width: 100%;        /* Largura total */
+        height: 180px;      
+        object-fit: cover;
     }
 
     .event-card:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    }
-
-    .event-image {
-        width: 130px;
-        height: auto;
-        object-fit: cover;
     }
 
     .event-details {
