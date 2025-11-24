@@ -144,16 +144,35 @@ body {
     padding: 20px;
 }
 
-.tag {
-    padding: 5px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    display: inline-block;
-    margin-bottom: 10px;
+.tags-container {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 8px;        
+    margin-bottom: 12px;
 }
 
-.tag.music { background: #e8d0ff; color: #7a1fff; }
-.tag.sports { background: #d0f0ff; color: #0080b3; }
+.tag {
+    display: inline-block;
+    padding: 4px 12px;     
+    border-radius: 20px;   
+
+    background-color: #f3e8ff; 
+    color: #7a1fff;
+    border: 1px solid rgba(122, 31, 255, 0.1);
+
+    font-size: 0.75rem;    
+    font-weight: 700;      
+    text-transform: uppercase; 
+    letter-spacing: 0.5px; 
+    
+    margin: 0;
+}
+
+.event-card:hover .tag {
+    background-color: #7a1fff;
+    color: white;
+    transition: all 0.3s ease;
+}
 
 .price {
     position: absolute;
