@@ -76,7 +76,7 @@
     var map = L.map('map').setView([-28.9355, -49.4908], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
     var markers = L.markerClusterGroup({
@@ -97,21 +97,18 @@
         }
     });
 
+    const eventosData = JSON.parse(document.getElementById('eventos-data').textContent);
+
     function createCustomIcon(categoria) {
         let colorClass = 'pin-outros';
         let iconClass = 'fa-star'; 
 
         if (categoria) {
             const cat = categoria.toLowerCase();
-            if (cat.includes('música') || cat.includes('show')) {
-                colorClass = 'pin-musica'; iconClass = 'fa-music';
-            } else if (cat.includes('cultura') || cat.includes('arte')) {
-                colorClass = 'pin-cultura'; iconClass = 'fa-palette';
-            } else if (cat.includes('educação') || cat.includes('workshop')) {
-                colorClass = 'pin-educacao'; iconClass = 'fa-graduation-cap';
-            } else if (cat.includes('gastronomia') || cat.includes('comida')) {
-                colorClass = 'pin-gastronomia'; iconClass = 'fa-utensils';
-            }
+            if (cat.includes('música') || cat.includes('show')) { colorClass = 'pin-musica'; iconClass = 'fa-music'; }
+            else if (cat.includes('cultura') || cat.includes('arte')) { colorClass = 'pin-cultura'; iconClass = 'fa-palette'; }
+            else if (cat.includes('educação') || cat.includes('workshop')) { colorClass = 'pin-educacao'; iconClass = 'fa-graduation-cap'; }
+            else if (cat.includes('gastronomia') || cat.includes('comida')) { colorClass = 'pin-gastronomia'; iconClass = 'fa-utensils'; }
         }
 
         return L.divIcon({
@@ -123,33 +120,73 @@
         });
     }
 
-    const eventosData = JSON.parse(document.getElementById('eventos-data').textContent);
+    function renderizarMarcadores(listaEventos) {
+        markers.clearLayers();
 
-    eventosData.forEach(evento => {
-        if (evento.lat && evento.lng) {
-            const marker = L.marker([evento.lat, evento.lng], {
-                icon: createCustomIcon(evento.categoria)
-            });
+        listaEventos.forEach(evento => {
+            if (evento.lat && evento.lng) {
+                const marker = L.marker([evento.lat, evento.lng], {
+                    icon: createCustomIcon(evento.categoria)
+                });
 
-            const popupContent = `
-                <div style="text-align: center; width: 200px;">
-                    <h3 style="margin: 0 0 5px 0; color: #4b2aad; font-size: 16px;">${evento.titulo}</h3>
-                    <p style="margin: 5px 0; font-size: 13px; color: #666;">${evento.local_nome}</p>
-                    <p style="font-weight: bold; margin: 5px 0; font-size: 12px;">${evento.data}</p>
-                    <a href="${evento.url}" style="display: inline-block; margin-top: 8px; color: #8b5cf6; text-decoration: none; font-weight: bold; font-size: 13px;">
-                        Ver Detalhes &rarr;
-                    </a>
-                </div>
-            `;
-            marker.bindPopup(popupContent);
+                const popupContent = `
+                    <div style="text-align: center; width: 200px;">
+                        <h3 style="margin: 0 0 5px 0; color: #4b2aad; font-size: 16px;">${evento.titulo}</h3>
+                        <p style="margin: 5px 0; font-size: 13px; color: #666;">${evento.local_nome}</p>
+                        <p style="font-weight: bold; margin: 5px 0; font-size: 12px;">${evento.data}</p>
+                        <a href="${evento.url}" style="display: inline-block; margin-top: 8px; color: #8b5cf6; text-decoration: none; font-weight: bold; font-size: 13px;">
+                            Ver Detalhes &rarr;
+                        </a>
+                    </div>
+                `;
+                marker.bindPopup(popupContent);
+                markers.addLayer(marker);
+            }
+        });
 
-            markers.addLayer(marker);
+        map.addLayer(markers);
+    }
+
+    renderizarMarcadores(eventosData);
+
+    function realizarBusca() {
+        const termo = document.querySelector('.search-input').value.toLowerCase().trim();
+
+        if (termo === "") {
+            renderizarMarcadores(eventosData);
+            return;
         }
+
+        const eventosFiltrados = eventosData.filter(evento => {
+            const titulo = evento.titulo ? evento.titulo.toLowerCase() : "";
+            const local = evento.local_nome ? evento.local_nome.toLowerCase() : "";
+            const categoria = evento.categoria ? evento.categoria.toLowerCase() : "";
+
+            const endereco = evento.endereco_completo ? evento.endereco_completo : ""; 
+
+            return titulo.includes(termo) || 
+                   local.includes(termo) || 
+                   categoria.includes(termo) ||
+                   endereco.includes(termo);
+        });
+
+        renderizarMarcadores(eventosFiltrados);
+
+        if (eventosFiltrados.length === 0) {
+            alert("Nenhum evento encontrado para essa busca.");
+        } else {
+            const bounds = L.latLngBounds(eventosFiltrados.map(e => [e.lat, e.lng]));
+            map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+        }
+    }
+
+    document.querySelector('.btn-search').addEventListener('click', realizarBusca);
+    document.querySelector('.search-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') realizarBusca();
     });
 
-    map.addLayer(markers);
-
     var userMarker = null;
+
     function localizarUsuario() {
         map.locate({setView: true, maxZoom: 16});
     }
@@ -176,6 +213,7 @@
 
     function onLocationError(e) {
         console.log("Erro de geolocalização: " + e.message);
+        alert("Não foi possível obter sua localização.");
     }
 
     map.on('locationfound', onLocationFound);

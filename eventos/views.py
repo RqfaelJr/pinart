@@ -191,10 +191,9 @@ def mapa(request):
             'categoria': str(evento.categorias.first()) if evento.categorias.exists() else 'Outros',
             'local_nome': evento.local.nome,
             'data': evento.data_hora_inicio.strftime('%d/%m/%Y às %H:%M'),
-            'url': f"/evento/{evento.id}/"
+            'url': f"/evento/{evento.id}/",
+            'endereco_completo': f"{evento.local.endereco.rua} {evento.local.endereco.bairro} {evento.local.endereco.cidade}".lower()
         })
-
-    
 
     return render(request, 'mapa.html', {
         'eventos': eventos, 
