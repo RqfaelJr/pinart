@@ -19,6 +19,7 @@ from django.db.models import Q
 def _get_next_url(request, default_name='home'):
     return request.POST.get('next') or request.GET.get('next') or reverse(default_name)
 
+@login_required
 def home(request):
     categoria_id = request.GET.get('categoria')
     query = request.GET.get('q')
@@ -181,7 +182,7 @@ def detalhe_evento(request, evento_id):
 @login_required
 def perfil(request):
     if not hasattr(request.user, 'pessoa'):
-        return redirect('cadastro_participante') # Ou para onde você cria o perfil
+        return redirect('cadastro_participante')
     
     pessoa = request.user.pessoa
 
