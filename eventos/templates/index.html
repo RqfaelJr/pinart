@@ -11,10 +11,15 @@
             <h1>Descubra Eventos Incríveis</h1>
             <p>Conecte-se com experiências que você ama</p>
             <div class="search-box">
-                <form method="get">
-                    <input type="text" name="q" placeholder="Buscar eventos, locais, categorias...">
-                </form>
-            </div>
+            <form method="get" action="{% url 'home' %}"> <input type="text" name="q" 
+                    value="{{ request.GET.q|default:'' }}" 
+                    placeholder="Buscar eventos, locais, categorias...">
+                
+                <button type="submit" style="border: none; background: none; cursor: pointer;">
+                    <i class="fa-solid fa-magnifying-glass" style="color: #7a1fff;"></i>
+                </button>
+            </form>
+</div>
         </section>
 
 

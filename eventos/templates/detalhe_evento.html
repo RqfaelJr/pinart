@@ -49,12 +49,12 @@
                     <div class="date-info-container">
                         <div class="date-entry">
                             <span class="date-badge badge-start">Início</span>
-                            <span>{{ evento.data_hora_inicio|timezone:"America/Sao_Paulo"|date:"d/m/Y" }} às {{ evento.data_hora_inicio|timezone:"America/Sao_Paulo"|time:"H:i" }}</span>
+                            <span>{{ evento.data_hora_inicio|date:"d/m/Y" }} às {{ evento.data_hora_inicio|time:"H:i" }}</span>
                         </div>
                         {% if evento.data_hora_fim %}
                         <div class="date-entry">
                             <span class="date-badge badge-end">Fim</span>
-                            <span>{{ evento.data_hora_fim|timezone:"America/Sao_Paulo"|date:"d/m/Y" }} às {{ evento.data_hora_fim|timezone:"America/Sao_Paulo"|time:"H:i" }}</span>
+                            <span>{{ evento.data_hora_fim|date:"d/m/Y" }} às {{ evento.data_hora_fim|time:"H:i" }}</span>
                         </div>
                         {% endif %}
                     </div>

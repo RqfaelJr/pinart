@@ -13,28 +13,39 @@ import json
 from django.db import transaction
 from django.http import JsonResponse
 from django.utils import timezone
+from django.db.models import Q
 
 
 def _get_next_url(request, default_name='home'):
     return request.POST.get('next') or request.GET.get('next') or reverse(default_name)
 
 def home(request):
-    categoria = request.GET.get('categoria')
-
+    categoria_id = request.GET.get('categoria')
+    query = request.GET.get('q')
 
     categorias = Categoria.objects.all()
+    eventos = Evento.objects.all().order_by('data_hora_inicio')
 
+    if categoria_id:
+        eventos = eventos.filter(categorias__id=categoria_id)
 
-    eventos = Evento.objects.all()
-    if categoria:
-        eventos = eventos.filter(categorias__id=categoria)
+    if query:
+        eventos = eventos.filter(
+            Q(titulo__icontains=query) |
+            Q(descricao__icontains=query) |
+            Q(local__nome__icontains=query) |
+            Q(categorias__nome__icontains=query)
+        ).distinct()
 
+    # 5. Monta o contexto
+    context = {
+        'eventos': eventos,
+        'categorias': categorias,
+        'categoria_selecionada': int(categoria_id) if categoria_id else None,
+        'query': query
+    }
 
-    return render(request, 'index.html', {
-    'eventos': eventos,
-    'categorias': categorias,
-    'categoria_selecionada': int(categoria) if categoria else None
-})
+    return render(request, 'index.html', context)
 
 @login_required
 @organizador_required
