@@ -1,7 +1,6 @@
 # 📌 PinArt - Descubra Eventos Incríveis
 
-[Coloque aqui um print da tela inicial do projeto, se tiver]
-![PinArt Screenshot](static/img/tela_mapa.png.png)
+![PinArt Screenshot](static/img/tela_mapa.png)
 
 O **PinArt** é uma plataforma web desenvolvida em Django para conectar organizadores de eventos aos usuários finais. O sistema permite descobrir eventos por localização (mapa interativo), categoria e nome, além de gerenciar inscrições e feedback.
 
