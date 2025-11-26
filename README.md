@@ -1,7 +1,6 @@
 # 📌 PinArt - Descubra Eventos Incríveis
 
-[Coloque aqui um print da tela inicial do projeto, se tiver]
-![PinArt Screenshot](static/img/tela_mapa.png.png)
+![PinArt Screenshot](static/img/tela_mapa.png)
 
 O **PinArt** é uma plataforma web desenvolvida em Django para conectar organizadores de eventos aos usuários finais. O sistema permite descobrir eventos por localização (mapa interativo), categoria e nome, além de gerenciar inscrições e feedback.
 
@@ -12,7 +11,6 @@ O **PinArt** é uma plataforma web desenvolvida em Django para conectar organiza
 ### 👤 Usuários e Perfis
 - **Cadastro Duplo:** Contas separadas para Organizadores e Participantes.
 - **Perfil Completo:** Gerenciamento de foto de perfil (upload via Cloudinary) e dados pessoais.
-- **Dashboard:** Visualização de estatísticas (eventos marcados vs. presenças confirmadas).
 
 ### 📅 Eventos
 - **Criação de Eventos:** Organizadores podem criar eventos com data, local e imagem de capa.
@@ -34,12 +32,10 @@ O **PinArt** é uma plataforma web desenvolvida em Django para conectar organiza
 - **Frontend:** HTML5, CSS3 (Responsivo), JavaScript
 - **Mapas:** Leaflet.js, MarkerCluster, ViaCEP API (para preenchimento de endereço)
 - **Mídia:** Cloudinary (Armazenamento de imagens na nuvem)
-- **Banco de Dados:** SQLite (Desenvolvimento)
+- **Banco de Dados:** PostgreSQL
 - **Outros:** FontAwesome (Ícones)
 
 ---
-
-## ⚙️ Como rodar o projeto localmente
 
 ## ⚙️ Como rodar o projeto localmente
 
@@ -53,7 +49,7 @@ Antes de começar, você precisa ter instalado em sua máquina:
 ### 1. Clone o repositório
 Abra o terminal e rode o comando:
 ```bash
-git clone [https://github.com/RqfaelJr/pinart.git](https://github.com/RqfaelJr/pinart.git)
+git clone https://github.com/RqfaelJr/pinart.git
 cd pinart
 ```
 ### 2. Crie e ative o Ambiente Virtual
