@@ -75,4 +75,57 @@
                 {% endfor %}
             </div>
         </section>
+
+        {% if inscricao_pendente %}
+            <div class="modal fade" id="modalConfirmacao" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Olá, {{ request.user.first_name }}!</h5>
+                        </div>
+                        <div class="modal-body">
+                            {% if inscricao_pendente.evento.imagem %}
+                            <img src="{{ inscricao_pendente.evento.imagem.url }}" alt="Foto do evento" class="modal-img">
+                            {% endif %}
+                            <p>Notamos que o evento <strong>{{ inscricao_pendente.evento.titulo }}</strong> já aconteceu.</p>
+                            <p>Você compareceu ao evento?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" onclick="responderPresenca('{{ inscricao_pendente.id }}', true)">Sim, eu fui!</button>
+                            <button type="button" class="btn btn-secondary" onclick="responderPresenca('{{ inscricao_pendente.id }}', false)">Não fui</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var myModal = new bootstrap.Modal(document.getElementById('modalConfirmacao'));
+                    myModal.show();
+                });
+
+                function responderPresenca(idInscricao, confirmou) {
+                    console.log("Clicou! ID:", idInscricao, "Confirmou:", confirmou);
+                    const url = "{% url 'confirmar_participacao' 0 %}".replace('0', idInscricao);
+                    
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({ 'confirmou': confirmou })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            var modalElement = document.getElementById('modalConfirmacao');
+                            var modalInstance = bootstrap.Modal.getInstance(modalElement);
+                            modalInstance.hide();
+
+                        }
+                    })
+                    .catch(error => console.error('Erro:', error));
+                }
+            </script>
+            {% endif %}
 {% endblock %}

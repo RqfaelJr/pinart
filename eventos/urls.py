@@ -13,4 +13,5 @@ urlpatterns = [
     path('mapa/', views.mapa, name='mapa'),
     path('evento/<int:evento_id>/confirmar_presenca/', views.confirmar_presenca, name='confirmar_presenca'),
     path('evento/<int:evento_id>/comentar/', views.comentar_evento, name='comentar_evento'),
+    path('evento/<int:inscricao_id>/confirmar_participacao/', views.confirmar_participacao, name='confirmar_participacao'),
 ]

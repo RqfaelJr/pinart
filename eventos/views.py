@@ -38,12 +38,21 @@ def home(request):
             Q(categorias__nome__icontains=query)
         ).distinct()
 
-    # 5. Monta o contexto
+    inscricao_pendente = None
+
+    if request.user.is_authenticated:
+        inscricao_pendente = Inscricao.objects.filter(
+            pessoa=request.user.pessoa,
+            evento__data_hora_fim__lt=timezone.now(), 
+            participou__isnull=True
+        ).first() 
+
     context = {
         'eventos': eventos,
         'categorias': categorias,
         'categoria_selecionada': int(categoria_id) if categoria_id else None,
-        'query': query
+        'query': query,
+        'inscricao_pendente': inscricao_pendente,
     }
 
     return render(request, 'index.html', context)
@@ -289,6 +298,25 @@ def comentar_evento(request, evento_id):
         messages.error(request, 'Erro ao enviar comentário. Verifique os campos.')
 
     return redirect('detalhe_evento', evento_id=evento_id)
+
+def confirmar_participacao(request, inscricao_id):
+    try:
+        inscricao = Inscricao.objects.get(id=inscricao_id, pessoa=request.user.pessoa)
+        
+        data = json.loads(request.body)
+        resposta = data.get('confirmou')
+        
+        inscricao.participou = resposta
+        inscricao.save()
+        
+        return JsonResponse({'status': 'ok'})
+        
+    except Inscricao.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Inscrição não encontrada.'}, status=404)
+        
+    except Exception as e:
+        print(f"Erro no servidor: {e}")
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 def erro_permissao(request, exception=None):
     return render(request, '403.html', status=403)

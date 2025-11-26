@@ -24,7 +24,7 @@ urlpatterns = [
     path('cadastro/', views.cadastro, name='cadastro'),
     path('login/', LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('perfil/editar/', views.editar_perfil, name='editar_perfil')
+    path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
 ]
 
 handler403 = 'eventos.views.erro_permissao'

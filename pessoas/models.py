@@ -65,11 +65,11 @@ class Pessoa(models.Model):
             return 'Organizador'
         return 'Participante'
 
-class Inscricao(models.Model): # TODO: implementar lógica de inscrição
+class Inscricao(models.Model):
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE, related_name='inscricoes')
     evento = models.ForeignKey('eventos.Evento', on_delete=models.CASCADE, related_name='inscricoes')
     data_inscricao = models.DateTimeField(auto_now_add=True)
-    participou = models.BooleanField(default=False)
+    participou = participou = models.BooleanField(null=True, blank=True, default=None)
 
     class Meta:
         unique_together = ('pessoa', 'evento')
