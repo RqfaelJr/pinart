@@ -237,6 +237,24 @@
         transform: translateX(24px);
     }
 
+        /* Campo com erro */
+    .input-error {
+        border-color: #ef4444 !important; /* Vermelho */
+        background-color: #fef2f2 !important; /* Fundo avermelhado leve */
+        animation: shake 0.3s ease-in-out; /* Tremidinha para chamar atenção */
+    }
+
+    .input-error:focus {
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+    }
+
+    /* Animação de tremor */
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
 
     @media (max-width: 600px) {
         .form-row-grid { grid-template-columns: 1fr; }
@@ -455,5 +473,32 @@
                 }
             });
         }
+
+        const form = document.querySelector('form');
+    const submitBtn = document.querySelector('.btn-submit');
+
+    submitBtn.addEventListener('click', function(e) {
+        let hasError = false;
+        const inputs = form.querySelectorAll('input[required], select[required]');
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                hasError = true;
+            
+                input.classList.add('input-error');
+
+                input.addEventListener('input', function() {
+                    this.classList.remove('input-error');
+                }, { once: true });
+            }
+        });
+
+        if (hasError) {
+            e.preventDefault();
+            const firstError = document.querySelector('.input-error');
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstError.focus();
+        }
+    });
     });
 </script>

@@ -3,11 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
 from .forms import UserForm, PessoaForm, EnderecoForm, UserUpdateForm, PessoaUpdateForm
 from django.contrib.auth.decorators import login_required
-
+from .models import Notificacao
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
-from django.db import transaction # Importante para segurança
-from .forms import UserForm, PessoaForm, EnderecoForm # Importe o form novo
+from django.db import transaction
 
 def cadastro(request):
     if request.method == 'POST':
@@ -35,6 +34,13 @@ def cadastro(request):
                 pessoa.user = user
                 pessoa.endereco = endereco
                 pessoa.save()
+
+                Notificacao.objects.create(
+                    pessoa=pessoa,
+                    titulo="Bem-vindo ao PinArt! 🎉",
+                    mensagem=f"Olá {user.first_name}! Seu cadastro foi realizado com sucesso. Explore o mapa e descubra eventos incríveis perto de você.",
+                    tipo='Sistema'
+                )
 
             return redirect('login')
 
