@@ -96,6 +96,24 @@
             border: none;
         }
 
+        .nav-link-notification {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px; 
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            background-color: #ef4444; 
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
         @media (max-width: 768px) {
             .hamburger {
                 display: block;
@@ -170,8 +188,16 @@
                 </li>
 
                 <li>
-                    <a href="{% url 'lista_notificacoes' %}" class="{% if request.resolver_match.url_name == 'lista_notificacoes' %}active{% endif %}">
-                        <i class="fa-solid fa-bell"></i> Notificações
+                    <a href="{% url 'lista_notificacoes' %}" class="nav-link-notification {% if request.resolver_match.url_name == 'lista_notificacoes' %}active{% endif %}">
+                        
+                        <div style="position: relative;"> <i class="fa-solid fa-bell"></i>
+                            
+                            {% if tem_notificacao_nao_lida %}
+                                <span class="notification-badge"></span>
+                            {% endif %}
+                        </div>
+                        
+                        Notificações
                     </a>
                 </li>
 
