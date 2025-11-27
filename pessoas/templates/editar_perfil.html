@@ -3,159 +3,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<style>
-    
-    .edit-profile-page {
-        background-color: #f8f9fa;
-        min-height: calc(100vh - 60px);
-        padding: 40px 20px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-    }
-
-    .edit-card {
-        background: white;
-        width: 100%;
-        max-width: 600px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        padding: 40px;
-        position: relative;
-    }
-
-    .page-title {
-        color: #4a148c;
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin-bottom: 30px;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    .section-header {
-        color: #6f42c1;
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-top: 25px;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #f3e8ff;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        color: #555;
-        font-weight: 500;
-        margin-bottom: 8px;
-        font-size: 0.9rem;
-    }
-
-    .form-group input[type="text"],
-    .form-group input[type="email"],
-    .form-group input[type="password"],
-    .form-group input[type="date"],
-    .form-group input[type="tel"],
-    .form-group textarea,
-    .form-group select {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #e0e0e0;
-        border-radius: 10px;
-        background-color: #f9f9f9;
-        font-size: 1rem;
-        color: #333;
-        transition: all 0.3s ease;
-        box-sizing: border-box;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-        border-color: #a855f7;
-        background-color: white;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
-    }
-
-    .file-input-wrapper {
-        text-align: center;
-        margin-bottom: 20px;
-        padding: 20px;
-        background-color: #f8f9fa;
-        border-radius: 15px;
-        border: 2px dashed #e0e0e0;
-    }
-    
-    .current-photo {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid #fff;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        margin-bottom: 15px;
-    }
-
-    .btn-actions {
-        display: flex;
-        gap: 15px;
-        margin-top: 30px;
-    }
-
-    .btn-save {
-        flex: 2;
-        background: linear-gradient(90deg, #6f42c1, #8b5cf6);
-        color: white;
-        border: none;
-        padding: 14px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
-
-    .btn-save:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(111, 66, 193, 0.3);
-    }
-
-    .btn-cancel {
-        flex: 1;
-        background-color: transparent;
-        color: #666;
-        border: 2px solid #e0e0e0;
-        padding: 14px;
-        border-radius: 12px;
-        font-weight: 600;
-        text-align: center;
-        text-decoration: none;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .btn-cancel:hover {
-        background-color: #f1f1f1;
-        color: #333;
-    }
-
-    .helptext {
-        font-size: 0.8rem;
-        color: #888;
-        margin-top: 5px;
-        display: block;
-    }
-</style>
-
+<link rel="stylesheet" href="{% static 'css/editar_perfil.css' %}">
 <div class="edit-profile-page">
     <div class="edit-card">
         <h2 class="page-title">
@@ -218,4 +66,36 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const wrapper = document.querySelector('.file-input-wrapper');
+        const fileInput = wrapper.querySelector('input[type="file"]');
+        
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const currentElement = wrapper.querySelector('.current-photo');
+
+                    if (currentElement.tagName === 'IMG') {
+                        currentElement.src = e.target.result;
+                    } 
+                    
+                    else {
+                        const newImg = document.createElement('img');
+                        newImg.src = e.target.result;
+                        newImg.className = 'current-photo';
+                        newImg.alt = "Prévia da foto";
+                        currentElement.parentNode.replaceChild(newImg, currentElement);
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 {% endblock %}
