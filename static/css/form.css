@@ -178,12 +178,7 @@ textarea {
     
     background-color: #6C63FF;
     color: white;
-
-    /* --- A CORREÇÃO ESTÁ AQUI --- */
-    /* Define um arredondamento grande para todos os lados */
     border-radius: 50px; 
-    /* Força explicitamente os cantos da esquerda a ficarem redondos,
-       sobrescrevendo o que quer que esteja deixando-os quadrados */
     border-top-left-radius: 50px;
     border-bottom-left-radius: 50px;
     
