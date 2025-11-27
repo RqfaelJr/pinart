@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .form-container {
     max-width: 850px;
     margin: 40px auto;
@@ -144,8 +148,13 @@ textarea {
 }
 
 @media (max-width: 700px) {
+
     .two-columns {
         flex-direction: column;
+    }
+    .page-title {
+        font-size: 24px;
+        margin-bottom: 20px;
     }
 }
 
@@ -161,22 +170,41 @@ textarea {
 }
 
 .btn-add {
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    
+    padding: 10px 24px; 
+    
     background-color: #6C63FF;
     color: white;
-    border-radius: 8px;
+
+    /* --- A CORREÇÃO ESTÁ AQUI --- */
+    /* Define um arredondamento grande para todos os lados */
+    border-radius: 50px; 
+    /* Força explicitamente os cantos da esquerda a ficarem redondos,
+       sobrescrevendo o que quer que esteja deixando-os quadrados */
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    
     text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2rem;
-    transition: background 0.3s;
+    font-weight: 600;
+    font-size: 1rem;
+    
+    white-space: nowrap; 
+    
+    transition: background 0.3s, transform 0.2s;
+    border: none;
+    cursor: pointer;
 }
 
 .btn-add:hover {
     background-color: #5a52d5;
+    transform: translateY(-2px);
+}
+
+.btn-add i {
+    margin-right: 8px;
 }
 
 .label-with-action {

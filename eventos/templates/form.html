@@ -52,7 +52,7 @@
             <div class="input-group">
                 {{ form.local }}
                 <button type="button" class="btn-add" onclick="abrirModalLocal()" title="Adicionar novo local">
-                    +
+                    <i class="fa-solid fa-plus"></i> Adicionar novo local
                 </button>
             </div>
         </div>
@@ -65,15 +65,12 @@
         <div class="form-card">
             <div class="label-with-action">
                 <label class="form-label">Categorias</label>
-                <a href="{% url 'create_categoria' %}" class="btn-add-small" title="Nova categoria" target="_blank">
-                    + Nova
-                </a>
             </div>
             
             <div class="category-container">
                 {% for cat in form.categorias %}
                     <label class="category-chip">
-                        {{ cat.tag }} <span>{{ cat.choice_label }}</span> </label>
+                        {{ cat.tag }} <span> {{ cat.choice_label }}</span> </label>
                 {% endfor %}
             </div>
         </div>
