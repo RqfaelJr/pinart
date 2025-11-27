@@ -22,6 +22,11 @@
 
     <div class="notificacoes-list">
         {% for notif in notificacoes %}
+            {% ifchanged notif.data_hora.date %}
+                <h4 class="date-separator" style="margin: 20px 0 10px; color: #888; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+                    {{ notif.data_hora|date:"d \d\e F" }}
+                </h4>
+            {% endifchanged %}
             <div class="notificacao-card {% if not notif.lida %}unread{% endif %}">
                 
                 <div class="notif-icon-box 

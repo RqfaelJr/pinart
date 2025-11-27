@@ -157,7 +157,7 @@ def create_evento(request):
 
 @login_required
 def lista_notificacoes(request):
-    notificacoes = Notificacao.objects.filter(pessoa=request.user.pessoa)
+    notificacoes = Notificacao.objects.filter(pessoa=request.user.pessoa).order_by('-data_hora')
     
     return render(request, 'notificacoes.html', {
         'notificacoes': notificacoes
