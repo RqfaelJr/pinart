@@ -3,7 +3,7 @@ from random import random
 import requests
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import Avaliacao, Categoria, Evento
+from .models import Categoria, Evento
 from pessoas.models import Inscricao, Notificacao
 from pessoas.forms import EnderecoForm
 from .forms import LocalForm, CategoriaForm, EventoForm, AvaliacaoForm
@@ -158,7 +158,7 @@ def create_evento(request):
 @login_required
 def lista_notificacoes(request):
     notificacoes = Notificacao.objects.filter(pessoa=request.user.pessoa).order_by('-data_hora')
-    
+
     return render(request, 'notificacoes.html', {
         'notificacoes': notificacoes
     })
